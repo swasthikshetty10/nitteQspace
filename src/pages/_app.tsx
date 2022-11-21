@@ -1,16 +1,25 @@
-import { AppProps } from 'next/app';
-
-import '@/styles/globals.css';
-// !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
-import '@/styles/colors.css';
-
-/**
- * !STARTERCONF info
- * ? `Layout` component is called in every page using `np` snippets. If you have consistent layout across all page, you can add it here too
- */
+import { AppProps } from "next/app";
+import "@/styles/globals.css";
+import { useEffect, useState } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  //  themes
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("dark") === "true") {
+      setDark(true);
+    } else {
+      setDark(false);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("dark", dark.toString());
+  }, [dark]);
+  return (
+    <div className={dark ? "dark" : ""}>
+      <Component {...pageProps} dark={dark} setDark={setDark} />
+    </div>
+  );
 }
 
 export default MyApp;
