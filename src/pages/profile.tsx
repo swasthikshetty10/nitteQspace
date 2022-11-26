@@ -1,60 +1,56 @@
-import React from 'react'
+import { profile } from "console";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React from "react";
+import { BiEditAlt } from "react-icons/bi";
 
-import Activity from '@/components/Activity'
-import Navbar from '@/components/Navbar'
-import NextImage from '@/components/NextImage'
-import SugCard from '@/components/SugCard'
-function profile() {
-  return (
-    <div className="flex flex-col">
-      <Navbar />
-      <div className="absolute top-[18vh] left-[19vh] w-[90vw] h-[80vh]">
-        <div className="flex flex-row gap-3 w-full h-full">
-          <div className="flex flex-col items-center justify-center gap-2 w-2/3">
-            <div className="flex relative flex-row items-start justify-start group transition-all ease-out bg-white rounded-2xl h-2/3 w-full overflow-hidden shadow-black hover:shadow-xl duration-500 ease-in-out ">
-              <div className='w-1/4 h-full overflow-hidden group-hover:shadow-2xl'>
-                <NextImage src="/images/cardbg.jpg" alt="ProfileBG" width="600" height="800" className="hover:scale-110 duration-1000 ease-out" />
-              </div>
-              <div className="my-auto flex w-52 h-52 -translate-x-32 rounded-full overflow-hidden border-white border-8 ring-black ring-4">
-                <NextImage src="/images/avatar.png" alt="ProfileBG" width="208" height="208" className="self-center hover:scale-110 transition duration-1000 ease-in-out" />
-              </div>
-              <div className="">
-
+function Profile() {
+  const { data: session, status } = useSession();
+  if (status !== "authenticated" && session === null) {
+    return <h1>loading</h1>;
+  } else if (session.user) {
+    return (
+      <div className="mx-auto mt-5 max-w-7xl sm:mt-10">
+        <div>
+          <div className="glass-wb flex  w-fit max-w-4xl flex-col overflow-hidden  md:flex-row ">
+            <div className="z-20 order-2  -mt-20 flex flex-col items-center justify-center gap-2 py-5 md:order-1 md:mt-0 md:px-10">
+              <Image
+                width={100}
+                height={100}
+                src={
+                  session.user.image
+                    ? `${session.user.image}?height=1000&width=1000`
+                    : ""
+                }
+                className="rounded-full"
+                alt="Profile Pic"
+              />
+              <div className="text-center">
+                <h3>
+                  {session.user.name ? session.user.name : session.user.email}
+                </h3>
+                <a className="text-sm">
+                  {session.user.email ? session.user.email : session.user.name}
+                </a>
               </div>
             </div>
-            <div className="h-1/2 w-full">
-              <h1 className='text-2xl font-mono'>Suggestions</h1>
-              <div className='flex flex-row items-center justify-between gap-2.5 h-3/4 overflow-x-auto'>
-                <SugCard profileName="Vidyesh" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Swasthik" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Vidyesh" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Swasthik" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Vidyesh" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Swasthik" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Vidyesh" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Swasthik" avatarImg="/images/avatar.png" />
-                <SugCard profileName="Swasthik" avatarImg="/images/avatar.png" />
-              </div>
-            </div>
-          </div>
-          <div className="w-1/3 h-full border-2 border-black rounded-2xl p-3">
-            <h1 className="font-mono text-3xl text-center mb-5">Recent Activity</h1>
-            {/* Type Profile Visit */}
-            <div className='flex flex-col items-center justify-between gap-5 overflow-y-auto h-5/6'>
-              <Activity />
-              <Activity />
-              <Activity />
-              <Activity />
-              <Activity />
-              <Activity />
-              <Activity />
+            <div className="relative order-1 h-fit w-auto md:order-2 ">
+              <Image
+                width={1000}
+                height={1000}
+                src="/images/cardbg.jpg"
+                alt="Thumbnail"
+                className="  hover:-z-1 z-0 h-full  w-full -translate-y-5 object-cover transition duration-500 ease-in-out hover:scale-105 md:translate-y-0 md:hover:translate-x-5"
+              />
+              <button className="absolute top-2 right-2 rounded-full bg-black bg-opacity-50 p-2 text-2xl text-white hover:bg-opacity-70">
+                <BiEditAlt />
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    );
+  }
 }
 
-
-export default profile
+export default Profile;
