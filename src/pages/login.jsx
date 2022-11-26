@@ -13,7 +13,7 @@ function Login() {
     console.log(session)
   }
   return (
-    <div className='flex justify-center items-center h-[100vh] w-[100vw] p-5 bg-gradient-to-br dark:bg-gradient-to-br from-sky-200 via-sky-50/50 to-pink-50 dark:from-slate-900 dark:to-slate-600 '>
+    <div className='flex absolute top-0 left-0 justify-center items-center h-[100vh] w-[100vw] p-5 bg-gradient-to-br dark:bg-gradient-to-br from-sky-200 via-sky-50/50 to-pink-50 dark:from-slate-900 dark:to-slate-600 '>
       <div className='p-5 space-y-4 w-full max-w-md text-center shadow-lg rounded-lg  bg-slate-400 dark:bg-slate-800 bg-opacity-10 backdrop-blur-xl'>
         <h2 className="font-bold ">Login/Register</h2>
         <button onClick={() => signIn("google", { redirect: `${window.location.origin}/profile` })} className='bg-black bg-opacity-5 dark:bg-opacity-30 hover:bg-opacity-10 dark:hover:bg-opacity-40 transition-all delay-50 duration-200 backdrop-blur-3xl rounded-lg flex font-semibold justify-center items-center gap-3 text-2xl p-3 text-center w-full'>

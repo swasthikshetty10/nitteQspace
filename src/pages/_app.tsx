@@ -7,7 +7,7 @@ import NavBar from "@/components/NavBar";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   //  themes
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   useEffect(() => {
     if (localStorage.getItem("dark") === "true") {
       setDark(true);
@@ -15,9 +15,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       setDark(false);
     }
   }, []);
-  useEffect(() => {
-    localStorage.setItem("dark", dark.toString());
-  }, [dark]);
   return (
     <SessionProvider session={session}>
       <DarkLightContextProvider value={[dark, setDark]}>

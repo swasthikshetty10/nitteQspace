@@ -6,8 +6,10 @@ function ToggleLightDark() {
   function toggle() {
     if (localStorage.getItem("dark") === "true") {
       setDark(false);
+      localStorage.setItem("dark", "false");
     } else {
       setDark(true);
+      localStorage.setItem("dark", "true");
     }
   }
   return (

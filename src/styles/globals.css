@@ -51,6 +51,10 @@
   .glass-ws {
     @apply rounded-2xl   border-gray-300/50   bg-slate-200/50 shadow-lg  dark:bg-gray-800/50;
   }
+  .btn-glossy {
+    @apply rounded-2xl  bg-gradient-to-r from-slate-500 to-slate-600  text-white  dark:from-gray-700 dark:to-gray-800;
+  }
+
   /* #region  /**=========== Typography =========== */
   .h0 {
     @apply font-primary text-3xl font-bold md:text-5xl;
