@@ -1,8 +1,11 @@
 import { AppProps } from "next/app";
 import "@/styles/globals.css";
 import { useEffect, useState } from "react";
+import { SessionProvider } from "next-auth/react";
+import DarkLightContextProvider from "@/context/darkContext";
+import NavBar from "@/components/NavBar";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   //  themes
   const [dark, setDark] = useState(false);
   useEffect(() => {
@@ -16,9 +19,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     localStorage.setItem("dark", dark.toString());
   }, [dark]);
   return (
-    <div className={dark ? "dark" : ""}>
-      <Component {...pageProps} dark={dark} setDark={setDark} />
-    </div>
+    <SessionProvider session={session}>
+      <DarkLightContextProvider value={[dark, setDark]}>
+        <div className={dark ? "dark  text-gray-200" : "text-gray-800"}>
+          <NavBar />
+          <Component {...pageProps} dark={dark} setDark={setDark} />
+        </div>
+      </DarkLightContextProvider>
+    </SessionProvider>
   );
 }
 

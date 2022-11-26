@@ -31,6 +31,7 @@ export const authOptions = {
     }),
   ],
   secret: process.env.AUTH_SECRET,
+  allowDangerousEmailAccountLinking: true,
 };
 
 export default NextAuth(authOptions);
