@@ -1,16 +1,24 @@
 import { profile } from "console";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { BiEditAlt } from "react-icons/bi";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 function Profile() {
   const { data: session, status } = useSession();
-  if (status !== "authenticated") {
+  const router = useRouter();
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/login");
+    }
+  }, [status]);
+  if (status === "loading") {
     return <h1>loading</h1>;
   }
-  if (session.user) {
+  if (status === "authenticated" && session.user) {
     return (
       <div className="mx-auto mt-5 max-w-7xl space-y-5 sm:mt-10">
         <div className="flex flex-col gap-5 lg:flex-row">
@@ -38,7 +46,10 @@ function Profile() {
                 </a>
                 <button
                   onClick={() =>
-                    signOut({ callbackUrl: `${window.location.origin}/login` })
+                    signOut({
+                      callbackUrl: `${window.location.origin}/login`,
+                      redirect: false,
+                    })
                   }
                   className="delay-50 mx-auto mt-4 flex w-fit transform items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 px-3 py-2 text-center  text-lg font-semibold backdrop-blur-3xl duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40 md:text-xl">
                   SignOut
