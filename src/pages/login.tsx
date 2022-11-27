@@ -19,17 +19,46 @@ function Login() {
   if (status === "authenticated") {
     router.push("/profile");
   }
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    setSuccess({ show: false, status: false, message: "" });
+    signIn("email", {
+      email,
+      callbackUrl: `${window.location.origin}/profile`,
+      redirect: false,
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          setSuccess({
+            show: true,
+            status: true,
+            message: `Checkout your email ${email} for the login link. If you don't see it
+          in a few minutes, check your spam folder.`,
+          });
+          setEmail("");
+        } else {
+          setSuccess({ show: true, status: true, message: "" });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   return (
     <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2 bg-gradient-to-br from-sky-200 via-sky-50/50 to-pink-50 p-5 dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-600 ">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-slate-400 bg-opacity-10 p-5  text-center shadow-lg backdrop-blur-xl dark:bg-slate-800">
         <h2 className="font-bold ">Login/Register</h2>
         <button
-          onClick={() =>
+          disabled={loading}
+          onClick={() => {
+            setLoading(true);
             signIn("google", {
               callbackUrl: `${window.location.origin}/profile`,
               redirect: false,
-            })
-          }
+            }).finally(() => setLoading(false));
+          }}
           className="delay-50 flex w-full items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 p-3 text-center text-2xl font-semibold backdrop-blur-3xl transition-all duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40">
           <FcGoogle /> <span>Google</span>
         </button>
@@ -38,43 +67,7 @@ function Login() {
           or
           <div className="h-[2px] w-full bg-gray-400/50"></div>
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!email) return;
-            setLoading(true);
-            setSuccess({
-              show: false,
-              status: false,
-              message: "",
-            });
-            signIn("email", {
-              email,
-              callbackUrl: `${window.location.origin}/profile`,
-              redirect: false,
-            })
-              .then((res) => {
-                if (res && res.status === 200) {
-                  setSuccess({
-                    show: true,
-                    status: true,
-                    message: `Checkout your email ${email} for the login link. If you don't see it
-                  in a few minutes, check your spam folder.`,
-                  });
-                  setEmail("");
-                } else {
-                  setSuccess({
-                    show: true,
-                    status: true,
-                    message: "",
-                  });
-                }
-              })
-              .finally(() => {
-                setLoading(false);
-              });
-          }}
-          className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <input
             onChange={(e) => {
               setEmail(e.target.value);
@@ -82,7 +75,7 @@ function Login() {
             value={email}
             type="email"
             spellCheck="false"
-            className=" bg w-full rounded-xl  bg-black bg-opacity-5  p-3 text-xl outline-none backdrop-blur-3xl  invalid:border-pink-500 invalid:text-pink-600 hover:bg-opacity-10 focus:border-2
+            className="delay-50  w-full rounded-xl  bg-black bg-opacity-5  p-3 text-xl outline-none backdrop-blur-3xl  invalid:border-pink-500 invalid:text-pink-600 hover:bg-opacity-10 focus:border-2
             focus:ring-0 
       focus:invalid:border-pink-600 focus:invalid:ring-pink-600 disabled:border-slate-200 disabled:bg-slate-50
       disabled:text-slate-500 disabled:shadow-none
@@ -97,7 +90,7 @@ function Login() {
             {loading ? (
               <>
                 <AiOutlineLoading3Quarters className="animate-spin" />
-                Hold on Getting things ready
+                Getting things ready
               </>
             ) : (
               <>
