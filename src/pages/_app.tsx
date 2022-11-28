@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import DarkLightContextProvider from "@/context/darkContext";
 import NavBar from "@/components/NavBar";
+import SideBar from "@/components/SideBar";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   //  themes
@@ -25,7 +26,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
               : "overflow-y-auto overflow-x-hidden bg-gradient-to-br from-sky-100 via-gray-100 to-gray-50   text-gray-800 "
           } h-screen w-screen  px-2 sm:px-5`}>
           <NavBar />
-          <Component {...pageProps} dark={dark} setDark={setDark} />
+          <div className=" mt-5 flex  flex-col-reverse  justify-between gap-5 sm:mt-10 md:flex-row">
+            <SideBar />
+            <Component {...pageProps} dark={dark} setDark={setDark} />
+          </div>
         </div>
       </DarkLightContextProvider>
     </SessionProvider>

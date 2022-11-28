@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineMail, AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useSession } from "next-auth/react";
-import { getSession, signIn } from "next-auth/react";
-import Navigator, { useRouter } from "next/router";
-import { redirect } from "next/dist/server/api-utils";
-import { allowedNodeEnvironmentFlags } from "process";
+import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);

@@ -20,7 +20,7 @@ function Profile() {
   }
   if (status === "authenticated" && session.user) {
     return (
-      <div className="mx-auto mt-5 max-w-7xl space-y-5 sm:mt-10">
+      <div className="mx-auto  max-w-7xl space-y-5">
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="glass-wb flex  w-full flex-col overflow-hidden  md:flex-row ">
             <div className="z-20 order-2 -mt-24  flex  flex-col items-center justify-center gap-2 py-5 md:order-1 md:mt-0 md:max-w-sm md:px-10">
