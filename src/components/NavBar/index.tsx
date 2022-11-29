@@ -18,27 +18,27 @@ function NavBar() {
           <a href="#" className="-ml-3 flex w-fit items-center">
             {dark ? (
               <Image
-                width={100}
+                width={500}
                 height={100}
-                src="/images/logo-dark.png"
+                src="/logo-dark.png"
                 className="h-12 w-auto transition duration-1000 ease-in-out sm:h-16 "
                 alt="Nitte QSpace dark  Logo"
               />
             ) : (
               <Image
-                width={100}
-                height={100}
-                src="/images/logo-light.png"
+                width={500}
+                height={200}
+                src="/logo-light.png"
                 className="h-12 w-auto transition duration-1000 ease-in-out sm:h-16 "
                 alt="Nitte QSpace light  Logo"
               />
             )}
           </a>
         </Link>
-        <div className="flex items-center justify-center gap-3 lg:order-2">
-          <div className="flex items-center gap-3 rounded-lg bg-black bg-opacity-5 px-3  py-2 dark:bg-opacity-30">
+        <div className="flex items-center justify-center gap-2 sm:gap-3 lg:order-2">
+          <div className="flex items-center gap-3 rounded-lg bg-black bg-opacity-5 p-3 dark:bg-opacity-30  sm:px-3 sm:py-2">
             <input
-              className="w-full bg-transparent text-lg outline-none   "
+              className="hidden w-full bg-transparent text-lg outline-none sm:block   "
               placeholder="search"
             />
             <BiSearchAlt className="delay-50 transform cursor-pointer text-xl duration-500 ease-in-out hover:rotate-[360deg] hover:scale-150  " />
