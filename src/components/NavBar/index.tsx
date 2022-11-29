@@ -44,7 +44,7 @@ function NavBar() {
             <BiSearchAlt className="delay-50 transform cursor-pointer text-xl duration-500 ease-in-out hover:rotate-[360deg] hover:scale-150  " />
           </div>
           {status === "authenticated" && session.user ? (
-            <Link href="/profile">
+            <Link href="profile">
               <Image
                 src={session.user.image ? session.user.image : ""}
                 width={40}
@@ -55,7 +55,7 @@ function NavBar() {
             </Link>
           ) : (
             <Link
-              href="/login"
+              href="login"
               className=" delay-50 flex  transform items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 px-3 py-2 text-center  text-lg font-semibold backdrop-blur-3xl duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40 md:text-xl">
               SignIn
             </Link>
