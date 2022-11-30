@@ -45,9 +45,16 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
-  image         String?
+  image         String?   @default("https://isobarscience.com/wp-content/uploads/2020/09/default-profile-picture1.jpg")
   accounts      Account[]
   sessions      Session[]
+  bio           String?
+  role          String?   @default("USER")
+  posts         Post[]
+  createdAt     DateTime  @default(now()) @map("created_at")
+  follower      Follow[]  @relation("follower")
+  following     Follow[]  @relation("following")
+  Thread        Thread[]
 
   @@map("users")
 }
@@ -59,4 +66,78 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Category {
+  id        Int         @id @default(autoincrement())
+  name      String
+  type      String      @default("QUERY")
+  slug      String
+  posts     Post[]
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  Resources Resources[]
+
+  @@map("categories")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String   @db.Text
+  images     Json?
+  anonymous  Boolean  @default(false)
+  votes      Int      @default(0)
+  published  Boolean  @default(false)
+  author     User     @relation(fields: [authorId], references: [id])
+  authorId   String
+  categoryId Int      @default(1) @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  Thread     Thread[]
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+}
+
+model Thread {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  votes     Int      @default(0)
+  threadId  Int      @map("thread_id")
+  anonymous Boolean  @default(false)
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  parentId  Int?     @map("parent_id")
+  parent    Thread?  @relation("ThreadToThread", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child     Thread[] @relation("ThreadToThread")
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  follower    User     @relation(name: "follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User     @relation(name: "following", fields: [followingId], references: [id])
+  followingId String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+model Resources {
+  id         Int      @id @default(autoincrement())
+  name       String
+  link       String
+  type       String?
+  categoryId Int      @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("resources")
 }

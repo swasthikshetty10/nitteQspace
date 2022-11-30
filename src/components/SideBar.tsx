@@ -45,8 +45,8 @@ function SideBar() {
             <BiCategory />
           </Icon>
         </Link>
-        <Link href="/settings" passHref legacyBehavior>
-          <Icon active={router.pathname === "/settings"}>
+        <Link href="/profile" passHref legacyBehavior>
+          <Icon active={router.pathname === "/profile"}>
             <BiCog />
           </Icon>
         </Link>
