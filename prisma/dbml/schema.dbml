@@ -1,0 +1,149 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table accounts {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  user users [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table sessions {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user users [not null]
+}
+
+Table users {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String [default: 'https://isobarscience.com/wp-content/uploads/2020/09/default-profile-picture1.jpg']
+  accounts accounts [not null]
+  sessions sessions [not null]
+  bio String
+  role String [default: 'USER']
+  posts Post [not null]
+  createdAt DateTime [default: `now()`, not null]
+  follower follows [not null]
+  following follows [not null]
+  Thread Thread [not null]
+}
+
+Table verificationtokens {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Table categories {
+  id Int [pk, increment]
+  name String [not null]
+  type String [not null, default: 'QUERY']
+  slug String [not null]
+  posts Post [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Resources resources [not null]
+}
+
+Table Post {
+  id Int [pk, increment]
+  title String [not null]
+  content String [not null]
+  images Json
+  anonymous Boolean [not null, default: false]
+  votes Int [not null, default: 0]
+  published Boolean [not null, default: false]
+  author users [not null]
+  authorId String [not null]
+  categoryId Int [not null, default: 1]
+  category categories [not null]
+  Thread Thread [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Thread {
+  id Int [pk, increment]
+  content String [not null]
+  votes Int [not null, default: 0]
+  threadId Int [not null]
+  anonymous Boolean [not null, default: false]
+  published Boolean [not null, default: false]
+  author users [not null]
+  authorId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  parentId Int
+  parent Thread
+  child Thread [not null]
+  Post Post
+  postId Int
+}
+
+Table follows {
+  id Int [pk, increment]
+  follower users [not null]
+  followerId String [not null]
+  following users [not null]
+  followingId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (followerId, followingId) [unique]
+  }
+}
+
+Table resources {
+  id Int [pk, increment]
+  name String [not null]
+  link String [not null]
+  type String
+  categoryId Int [not null]
+  category categories [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Ref: accounts.userId > users.id [delete: Cascade]
+
+Ref: sessions.userId > users.id [delete: Cascade]
+
+Ref: Post.authorId > users.id
+
+Ref: Post.categoryId > categories.id [delete: No Action]
+
+Ref: Thread.authorId > users.id
+
+Ref: Thread.parentId - Thread.id [delete: No Action]
+
+Ref: Thread.postId > Post.id
+
+Ref: follows.followerId > users.id
+
+Ref: follows.followingId > users.id
+
+Ref: resources.categoryId > categories.id [delete: No Action]

@@ -27,6 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
   @@map("accounts")
 }
 
@@ -37,6 +38,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("sessions")
 }
 
@@ -96,6 +98,9 @@ model Post {
   Thread     Thread[]
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([authorId])
+  @@index([categoryId])
 }
 
 model Thread {
@@ -114,6 +119,10 @@ model Thread {
   child     Thread[] @relation("ThreadToThread")
   Post      Post?    @relation(fields: [postId], references: [id])
   postId    Int?
+
+  @@index([parentId])
+  @@index([postId])
+  @@index([authorId])
 }
 
 model Follow {
@@ -126,6 +135,7 @@ model Follow {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@unique([followerId, followingId])
+  @@index([followingId])
   @@map("follows")
 }
 
@@ -139,5 +149,6 @@ model Resources {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
+  @@index([categoryId])
   @@map("resources")
 }
