@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import DarkLightContextProvider from "@/context/darkContext";
 import NavBar from "@/components/NavBar";
 import SideBar from "@/components/SideBar";
-
+import { trpc } from "../utils/trpc";
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   //  themes
   const [dark, setDark] = useState(true);
@@ -38,4 +38,4 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   );
 }
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);
