@@ -11,7 +11,7 @@ function Home() {
   return (
     <>
       <div className="glass-wb   w-full max-w-7xl  space-y-14 overflow-y-auto p-5">
-        <div className="max-w-4xl space-y-14">
+        <div className="xs:max-h-[70vh] max-h-[72vh] max-w-4xl space-y-14 sm:max-h-[70vh] md:max-h-[75vh]">
           <Post />
           <Post />
           <Post />

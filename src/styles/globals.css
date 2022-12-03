@@ -1,6 +1,4 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root {
   /* #region  /**=========== Primary Color =========== */
@@ -126,3 +124,15 @@
     background-size: 0 2px, 100% 2px;
   }
 }
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 14px;
+}
+@tailwind components;
+@tailwind utilities;
