@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import DarkLightContextProvider from "@/context/darkContext";
 import NavBar from "@/components/NavBar";
 import SideBar from "@/components/SideBar";
-
+import { trpc } from "../utils/trpc";
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   //  themes
   const [dark, setDark] = useState(true);
@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           <NavBar />
           <div className=" mt-5 flex  flex-col-reverse  justify-between gap-5 sm:mt-10 md:flex-row">
             <SideBar />
-            <div className="mx-auto  max-w-7xl space-y-5">
+            <div className="mx-auto w-full max-w-7xl space-y-5">
               <Component {...pageProps} dark={dark} setDark={setDark} />
             </div>
           </div>
@@ -38,4 +38,4 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   );
 }
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);

@@ -45,7 +45,7 @@ function Login() {
       });
   };
   return (
-    <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2 bg-gradient-to-br from-sky-200 via-sky-50/50 to-pink-50 p-5 dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-600 ">
+    <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2 bg-gradient-to-br from-sky-300 via-sky-50/50 to-sky-100 p-5 dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-600 ">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-slate-400 bg-opacity-10 p-5  text-center shadow-lg backdrop-blur-xl dark:bg-slate-800">
         <h2 className="font-bold ">Login/Register</h2>
         <button
