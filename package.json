@@ -37,6 +37,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
+    "react-tenor": "^2.2.0",
     "styled-components": "^5.3.6",
     "tailwind-merge": "^1.8.0",
     "zod": "^3.19.1"

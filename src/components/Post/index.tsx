@@ -5,15 +5,11 @@ import { Carousel, Avatar, Badge } from "flowbite-react";
 import { BiComment, BiUpvote, BiDownvote } from "react-icons/bi";
 import { ImArrowDown, ImArrowUp } from "react-icons/im";
 import { FaShare } from "react-icons/fa";
-import {
-  HiCheck,
-  HiClock,
-  HiCode,
-  HiOutlineCode,
-  HiOutlineSave,
-} from "react-icons/hi";
+import { HiClock, HiCode, HiOutlineSave, HiX } from "react-icons/hi";
+import Tenor from "react-tenor";
+import { MdOutlineGif } from "react-icons/md";
 
-function Post() {
+function Post({ postId }: { postId: string }) {
   return (
     <>
       <div className="glass-ws flex w-full  flex-col gap-2 p-3 sm:p-5 ">
@@ -105,7 +101,6 @@ function Post() {
           </p>
         </div>
         <div className="overflow-x-scroll">
-          {}
           <Comments>
             <Comments>
               <Comments>
@@ -186,6 +181,7 @@ const Comments = ({ children }: any) => {
 
 const CommentBox = () => {
   const [show, setShow] = useState(false);
+  const [showGif, setShowGif] = useState(false);
   return (
     <>
       {!show ? (
@@ -207,7 +203,7 @@ const CommentBox = () => {
                 <textarea
                   id="comment"
                   rows={4}
-                  className="w-full border-0 bg-slate-200/50 px-0 text-sm text-gray-900 focus:ring-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
+                  className="w-full border-0 bg-slate-200/50 p-2  text-sm text-gray-900 focus:ring-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
                   placeholder="Write a comment..."
                   required></textarea>
               </div>
@@ -217,7 +213,8 @@ const CommentBox = () => {
                   className="hi inline-flex items-center rounded-lg bg-slate-700/60 py-2.5 px-4 text-center text-xs font-medium text-white hover:bg-slate-700 focus:ring-4 focus:ring-slate-200 dark:bg-slate-200 dark:text-slate-700 dark:hover:bg-slate-50 dark:focus:ring-slate-900">
                   Post comment
                 </button>
-                <div className="flex space-x-1 pl-0 sm:pl-2">
+
+                <div className="flex space-x-1 pl-0 text-xl sm:pl-2">
                   <button
                     type="button"
                     className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -237,27 +234,34 @@ const CommentBox = () => {
                   <button
                     type="button"
                     className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <HiCode className="text-xl" />
+                    <HiCode />
                     <span className="sr-only">Code</span>
                   </button>
                   <button
+                    onClick={() => setShowGif(true)}
                     type="button"
                     className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg
-                      aria-hidden="true"
-                      className="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                        clip-rule="evenodd"></path>
-                    </svg>
+                    <MdOutlineGif className="-m-2 text-4xl" />
                     <span className="sr-only">Upload image</span>
                   </button>
                 </div>
               </div>
+              {showGif && (
+                <div className="flex w-full justify-end gap-2 p-2">
+                  <Tenor
+                    token="PFOXR5L7C95P"
+                    onSelect={(result) => console.log(result)}
+                  />
+
+                  <button
+                    onClick={() => setShowGif(false)}
+                    type="button"
+                    className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <HiX />
+                    <span className="sr-only">Close</span>
+                  </button>
+                </div>
+              )}
             </div>
           </form>
           <p className="ml-auto text-xs text-gray-500 dark:text-gray-400">
