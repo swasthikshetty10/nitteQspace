@@ -1,21 +1,173 @@
 import { Head } from "next/document";
-import Image from "next/image";
 import React from "react";
-import { Carousel, Avatar, Badge } from "flowbite-react";
-import { BiComment, BiUpvote, BiDownvote } from "react-icons/bi";
-import { ImArrowDown, ImArrowUp } from "react-icons/im";
-import { FaShare } from "react-icons/fa";
-import { HiCheck, HiClock, HiOutlineSave } from "react-icons/hi";
 import Post from "@/components/Post";
+import { Card } from "flowbite-react";
 function Home() {
   return (
     <>
-      <div className="glass-wb   w-full max-w-7xl space-y-14 overflow-y-auto overflow-x-hidden p-5">
-        <div className="xs:max-h-[70vh] max-h-[72vh] max-w-4xl space-y-14 sm:max-h-[70vh] md:max-h-[75vh]">
+      <div className="glass-wb flex w-full   max-w-7xl items-start gap-5   overflow-x-hidden p-2 sm:p-5">
+        <div className="xs:max-h-[70vh] max-h-[72vh] w-full space-y-14 overflow-y-auto rounded-xl sm:max-h-[70vh] md:max-h-[75vh]">
           <Post postId="" />
           <Post postId="" />
           <Post postId="" />
           <Post postId="" />
+        </div>
+        <div className=" glass-ws  xs:max-h-[70vh] hidden h-full max-h-[72vh] w-full  min-w-[20vw] max-w-[20vw] flex-col items-center justify-center space-y-5  overflow-y-hidden p-5 sm:max-h-[70vh]  md:max-h-[75vh] lg:block">
+          <div className="space-y-2  pb-5 font-semibold">
+            <a>Resources</a>
+            <div className="flex w-full flex-wrap gap-2 ">
+              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
+                #1stYear
+              </Badge>
+              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
+                #3rdSem
+              </Badge>
+              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
+                #5thSem
+              </Badge>
+              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
+                #7thSem
+              </Badge>
+            </div>
+          </div>
+          <div className="space-y-2 font-semibold">
+            <a>Branches</a>
+            <div className="flex w-full flex-wrap gap-2 ">
+              <Badge>CSE</Badge>
+              <Badge>ISE</Badge>
+              <Badge>ENC</Badge>
+              <Badge>AIML</Badge>
+              <Badge>CCE</Badge>
+              <Badge>MECH</Badge>
+              <Badge>EE</Badge>
+            </div>
+          </div>
+          <Card className="w-fit bg-gray-300  ">
+            <div className="flex items-center justify-between">
+              <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+                Recent Queries
+              </h5>
+              <a
+                href="#"
+                className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                View all
+              </a>
+            </div>
+            <div className="flow-root ">
+              <ul className="divide-y divide-gray-200 overflow-y-auto dark:divide-gray-700">
+                <li className="py-3 sm:py-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="shrink-0">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
+                        alt="Neil image"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        Neil Sims
+                      </p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                        email@windster.com
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                      $320
+                    </div>
+                  </div>
+                </li>
+                <li className="py-3 sm:py-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="shrink-0">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                        alt="Bonnie image"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        Bonnie Green
+                      </p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                        email@windster.com
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                      $3467
+                    </div>
+                  </div>
+                </li>
+                <li className="py-3 sm:py-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="shrink-0">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                        alt="Michael image"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        Michael Gough
+                      </p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                        email@windster.com
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                      $67
+                    </div>
+                  </div>
+                </li>
+                <li className="py-3 sm:py-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="shrink-0">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://flowbite.com/docs/images/people/profile-picture-4.jpg"
+                        alt="Lana image"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        Lana Byrd
+                      </p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                        email@windster.com
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                      $367
+                    </div>
+                  </div>
+                </li>
+                <li className="pt-3 pb-0 sm:pt-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="shrink-0">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                        alt="Thomas image"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        Thomes Lean
+                      </p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                        email@windster.com
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                      $2367
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </Card>
         </div>
       </div>
     </>
@@ -23,3 +175,15 @@ function Home() {
 }
 
 export default Home;
+
+const Badge = ({ children, className }: any) => {
+  return (
+    <div
+      className={
+        "bg w-fit cursor-pointer rounded-md bg-gray-300 px-3 py-1 text-sm font-semibold hover:bg-gray-900 hover:text-gray-300 dark:bg-gray-900 dark:hover:bg-gray-300 dark:hover:text-gray-900 " +
+        className
+      }>
+      {children}
+    </div>
+  );
+};
