@@ -8,6 +8,7 @@
   "headwind.runOnSave": false,
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "cSpell.words": [
-    "trpc"
+    "trpc",
+    "profilemodal"
   ]
 }
