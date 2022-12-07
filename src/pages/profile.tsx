@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { BiEditAlt } from "react-icons/bi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { BiEditAlt } from "react-icons/bi";
+import { RiDragDropLine } from "react-icons/ri";
+
 import { trpc } from "@/utils/trpc";
 
 function Profile() {
@@ -61,7 +63,7 @@ function Profile() {
               className="  hover:-z-1 z-0 h-full  w-full -translate-y-5 object-cover transition duration-500 ease-in-out hover:scale-105 md:translate-y-0 md:hover:translate-x-5"
             />
             <button
-              className="absolute top-2 right-2 rounded-full bg-black bg-opacity-50 p-2 text-2xl text-white hover:bg-opacity-70"
+              className="absolute top-2 right-2 rounded-full bg-black bg-opacity-50 p-2 text-2xl text-white  hover:bg-opacity-70"
               onClick={() => showModal(true)}>
               <BiEditAlt />
             </button>
@@ -109,12 +111,12 @@ const Modal = ({ showModal, data }: any) => {
     setLoading(false);
   };
   return (
-    <div className="fixed  -top-4 left-0 z-50 h-screen w-screen bg-transparent backdrop-blur-lg">
+    <div className="dark:  fixed -top-4 left-0 z-50 h-screen w-screen  bg-transparent backdrop-blur-md">
       <div className="flex h-full w-full items-center justify-center self-center">
         <form
           onSubmit={handleSubmit}
-          className="glass-wb relative m-auto flex h-full w-full flex-col gap-2 p-10 transition duration-500 ease-in-out  md:h-fit md:w-2/5">
-          <h1 className="text-center font-mono text-lg text-white md:text-xl lg:text-2xl">
+          className="glass-wb relative m-auto flex h-full w-full flex-col gap-2 bg-slate-300/80 p-10 shadow-2xl transition duration-500 ease-in-out dark:bg-slate-900/70  md:h-fit md:w-2/5">
+          <h1 className="text-center font-mono text-lg md:text-xl lg:text-2xl">
             Update Your Profile
           </h1>
           <span
@@ -128,18 +130,18 @@ const Modal = ({ showModal, data }: any) => {
             name="name"
             id="name"
             defaultValue={data.name}
-            className="rounded-md bg-transparent text-white"
+            className="rounded-md border-gray-800 bg-transparent dark:border-gray-500"
           />
           <label htmlFor="bio">Bio:</label>
           <textarea
             name="bio"
             id="bio"
             defaultValue={data.bio}
-            className="h-36 resize-none rounded-md bg-transparent text-white"
+            className="h-36 resize-none rounded-md bg-transparent "
           />
           <label htmlFor="image">Profile Picture:</label>
           <div className="flex h-14 flex-row items-center justify-center gap-5 rounded-md border border-gray-500">
-            <label className="text-white">
+            <label className="">
               <input type="file" className="hidden" name="image" />
               <span className="cursor-pointer font-semibold underline-offset-2 hover:underline">
                 Choose A File
@@ -147,9 +149,25 @@ const Modal = ({ showModal, data }: any) => {
               Or Drop It Here !!
             </label>
           </div>
-          <button
-            type="submit"
-            className="mt-2 w-2/3 self-center rounded-md border-2 border-white bg-transparent p-2 text-white transition duration-500 ease-in-out hover:bg-gray-300 hover:text-black">
+
+          <label htmlFor="profilepic">Profile Picture:</label>
+          <div className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-800 bg-transparent dark:border-gray-500  dark:hover:border-gray-700">
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <RiDragDropLine className=" text-2xl" />
+              <p className="mb-2 text-sm ">
+                <span className="font-semibold">Click to upload</span> or drag
+                and drop
+              </p>
+              <p className="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            </div>
+            <input
+              id="profilepic"
+              name="profilepic"
+              type="file"
+              className="hidden"
+            />
+          </div>
+          <button className="hover: dark:hover: mt-2 w-2/3 self-center rounded-md border-2 border-gray-800 bg-transparent p-2 font-semibold transition duration-500 ease-in-out hover:bg-gray-800 dark:border-gray-500 dark:hover:bg-gray-300">
             Save
           </button>
         </form>
