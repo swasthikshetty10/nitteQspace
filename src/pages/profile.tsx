@@ -8,6 +8,9 @@ import { BiEditAlt } from "react-icons/bi";
 import { RiDragDropLine } from "react-icons/ri";
 
 import { trpc } from "@/utils/trpc";
+import { uploadFile } from "@/utils/fileUpload";
+import FileDropzone, { FileUploadWithProgress } from "@/components/FileUpload";
+import { Avatar } from "flowbite-react";
 
 function Profile() {
   const { data: session, status } = useSession();
@@ -31,12 +34,11 @@ function Profile() {
         <div className="glass-wb flex  w-full flex-col overflow-hidden  md:flex-row ">
           <div className="z-20 order-2 -mt-24  flex  flex-col items-center justify-center gap-2 py-5 md:order-1 md:mt-0 md:max-w-sm md:px-10">
             <div className="overflow-hidden rounded-full ">
-              <Image
-                width={100}
-                height={100}
-                src={user.data.image || "/images/profile.png"}
-                className="transition duration-500 ease-in-out hover:scale-105 "
-                alt="Profile Pic"
+              <Avatar
+                className="min-w-max"
+                img={user.data.image || "/images/avatar.png"}
+                size="xl"
+                rounded={true}
               />
             </div>
             <div className=" text-center ">
@@ -94,87 +96,85 @@ function Profile() {
 export default Profile;
 
 const Modal = ({ showModal, data }: any) => {
+  const [files, setFiles] = useState<any>([]);
+  const [file, setFile] = useState<any>([{ url: data.image }]);
   const [loading, setLoading] = useState(false);
   function handleProfileModal() {
     showModal(false);
   }
-  const mutation = trpc.user.update.useMutation();
+  useEffect(() => {
+    if (files.length > 0) {
+      setFile(files[0]);
+    }
+  }, [files]);
+  useEffect(() => {
+    if (file.url) {
+      setFiles([]);
+    }
+  }, [file]);
+  // refetch the user data after updating
+  const utils = trpc.useContext();
+  const mutation = trpc.user.update.useMutation({
+    onSuccess: () => {
+      showModal(false);
+      utils.user.get.invalidate({ email: data.email });
+    },
+  });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     const formData = {
       name: e.target.name.value,
-      image: e.target.image.value,
+      image: file.url || data.image,
       bio: e.target.bio.value,
     };
     await mutation.mutateAsync(formData);
     setLoading(false);
   };
   return (
-    <div className="dark:  fixed -top-4 left-0 z-50 h-screen w-screen  bg-transparent backdrop-blur-md">
-      <div className="flex h-full w-full items-center justify-center self-center">
-        <form
-          onSubmit={handleSubmit}
-          className="glass-wb relative m-auto flex h-full w-full flex-col gap-2 bg-slate-300/80 p-10 shadow-2xl transition duration-500 ease-in-out dark:bg-slate-900/70  md:h-fit md:w-2/5">
-          <h1 className="text-center font-mono text-lg md:text-xl lg:text-2xl">
-            Update Your Profile
-          </h1>
-          <span
-            className="absolute top-5 right-7 cursor-pointer text-2xl md:right-10 md:text-3xl"
-            onClick={handleProfileModal}>
-            &times;
-          </span>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            defaultValue={data.name}
-            className="rounded-md border-gray-800 bg-transparent dark:border-gray-500"
+    <div className="fixed -top-4 left-0 z-50 mt-0 flex h-screen w-screen items-center justify-center  bg-transparent  p-5 backdrop-blur-md">
+      <form
+        onSubmit={handleSubmit}
+        className="glass-wb xs:p-10 relative m-auto flex h-full w-full max-w-xl flex-col gap-2 bg-slate-300/80 p-5  shadow-2xl  dark:bg-slate-900/70  md:h-fit ">
+        <h1 className="text-center font-mono text-lg md:text-xl lg:text-2xl">
+          Update Your Profile
+        </h1>
+        <span
+          className="absolute top-5 right-7 cursor-pointer text-2xl md:right-10 md:text-3xl"
+          onClick={handleProfileModal}>
+          &times;
+        </span>
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          defaultValue={data.name}
+          className="rounded-md border-gray-800 bg-transparent dark:border-gray-500"
+        />
+        <label htmlFor="bio">Bio:</label>
+        <textarea
+          name="bio"
+          id="bio"
+          defaultValue={data.bio}
+          className="h-36 resize-none rounded-md bg-transparent "
+        />
+        <label htmlFor="image">Profile Picture:</label>
+        <div className="glass-wb flex w-full flex-wrap items-center  justify-center gap-5 p-2 sm:flex-nowrap">
+          <Avatar
+            className="min-w-max"
+            img={file.url || data.image}
+            size="xl"
+            rounded={true}
           />
-          <label htmlFor="bio">Bio:</label>
-          <textarea
-            name="bio"
-            id="bio"
-            defaultValue={data.bio}
-            className="h-36 resize-none rounded-md bg-transparent "
-          />
-          <label htmlFor="image">Profile Picture:</label>
-          <div className="flex h-14 flex-row items-center justify-center gap-5 rounded-md border border-gray-500">
-            <label className="">
-              <input type="file" className="hidden" name="image" />
-              <span className="cursor-pointer font-semibold underline-offset-2 hover:underline">
-                Choose A File
-              </span>{" "}
-              Or Drop It Here !!
-            </label>
-          </div>
 
-          <label htmlFor="profilepic">Profile Picture:</label>
-          <div className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-800 bg-transparent dark:border-gray-500  dark:hover:border-gray-700">
-            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <RiDragDropLine className=" text-2xl" />
-              <p className="mb-2 text-sm ">
-                <span className="font-semibold">Click to upload</span> or drag
-                and drop
-              </p>
-              <p className="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-            </div>
-            <input
-              id="profilepic"
-              name="profilepic"
-              type="file"
-              className="hidden"
-            />
-          </div>
-          <button className="hover: dark:hover: mt-2 w-2/3 self-center rounded-md border-2 border-gray-800 bg-transparent p-2 font-semibold transition duration-500 ease-in-out hover:bg-gray-800 dark:border-gray-500 dark:hover:bg-gray-300">
-            Save
-          </button>
-        </form>
-      </div>
+          <FileDropzone files={files} setFiles={setFiles} />
+        </div>
+
+        <button className=" mt-2 w-2/3 self-center rounded-md border-2 border-gray-800 bg-transparent p-2 font-semibold  hover:bg-gray-600/20 dark:border-gray-500 dark:hover:bg-gray-900">
+          Save
+        </button>
+      </form>
     </div>
   );
 };
-function useCallBack(arg0: () => Promise<void>): React.EffectCallback {
-  throw new Error("Function not implemented.");
-}

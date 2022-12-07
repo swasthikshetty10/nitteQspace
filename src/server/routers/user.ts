@@ -21,7 +21,7 @@ export const userRouter = router({
       // filter field which is not empty
       type T = keyof typeof input;
       Object.keys(input).forEach((key) => {
-        if (input[key as T] === "") {
+        if (key != "bio" && input[key as T] === "") {
           delete input[key as T];
         }
       });

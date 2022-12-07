@@ -6,11 +6,10 @@ import Head from "next/head";
 
 export default function HomePage() {
   const hello = trpc.hello.useQuery({ text: "client" });
+  const data = trpc.test.useQuery({ hello: "Test" });
   if (!hello.data) {
     return <div>Loading...</div>;
   }
-  const data = trpc.test.useQuery({ hello: "Test" });
-
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}

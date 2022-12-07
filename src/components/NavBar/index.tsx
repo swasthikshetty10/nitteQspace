@@ -6,6 +6,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { DarkLightContext } from "../../context/darkContext";
+import { Avatar } from "flowbite-react";
 
 function NavBar() {
   const [active, setActive] = useState(false);
@@ -45,12 +46,12 @@ function NavBar() {
           </div>
           {status === "authenticated" && session.user ? (
             <Link href="profile">
-              <Image
-                src={session.user.image ? session.user.image : ""}
-                width={40}
-                height={40}
-                alt={"profile Pic"}
-                className="rounded-full"
+              <Avatar
+                className="min-w-fit gap-0"
+                img={session.user.image ? session.user.image : ""}
+                size="md"
+                rounded={true}
+                bordered={false}
               />
             </Link>
           ) : (
