@@ -7,7 +7,6 @@ export const userRouter = router({
     .input(
       z.object({
         name: z.string().optional(),
-        email: z.string().optional(),
         image: z.string().optional(),
         bio: z.string().optional(),
       })
@@ -19,6 +18,14 @@ export const userRouter = router({
           message: "Not authenticated",
         });
       }
+      // filter field which is not empty
+      type T = keyof typeof input;
+      Object.keys(input).forEach((key) => {
+        if (input[key as T] === "") {
+          delete input[key as T];
+        }
+      });
+
       const user = await ctx.prisma.user.update({
         where: {
           email: ctx.session.user?.email || "",

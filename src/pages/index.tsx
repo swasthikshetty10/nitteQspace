@@ -10,7 +10,6 @@ export default function HomePage() {
     return <div>Loading...</div>;
   }
   const data = trpc.test.useQuery({ hello: "Test" });
-  React.useEffect(() => {}, [data]);
 
   return (
     <Layout>
