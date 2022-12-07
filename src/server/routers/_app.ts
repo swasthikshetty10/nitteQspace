@@ -3,7 +3,7 @@ import { procedure, router } from "../trpc";
 import { Context } from "../context";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { userRouter } from "@/server/routers/user";
-import { postRouter } from "@/server/routers/post";
+import { postRouter } from "@/server/routers/queries";
 export const t = initTRPC.context<Context>().create();
 export const appRouter = router({
   user: userRouter,

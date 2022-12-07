@@ -27,7 +27,7 @@ export default function FileDropzone({ files, setFiles }: any) {
   };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: ".png,.jpeg,.svg,.gif" as any,
+    accept: ".jpeg,.jpg,.png,.gif" as any,
     maxSize: 5 * 1000 * 1024,
   });
 
