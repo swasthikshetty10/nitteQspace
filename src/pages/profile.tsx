@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { BiEditAlt } from "react-icons/bi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { BiEditAlt } from "react-icons/bi";
+import { RiDragDropLine } from "react-icons/ri";
+
 import { trpc } from "@/utils/trpc";
 
 function Profile() {
@@ -121,12 +123,12 @@ const Modal = ({ showModal }: any) => {
     };
   };
   return (
-    <div className="fixed  -top-4 left-0 z-50 h-screen w-screen bg-transparent backdrop-blur-lg">
+    <div className="fixed  -top-4 left-0 z-50 h-screen w-screen bg-transparent backdrop-blur-md dark:text-white text-black">
       <div className="flex h-full w-full items-center justify-center self-center">
         <form
           onSubmit={handleSubmit}
-          className="glass-wb relative m-auto flex h-full w-full flex-col gap-2 p-10 transition duration-500 ease-in-out  md:h-fit md:w-2/5">
-          <h1 className="text-center font-mono text-lg text-white md:text-xl lg:text-2xl">
+          className="glass-wb shadow-2xl bg-slate-300/80 dark:bg-slate-900/70 relative m-auto flex h-full w-full flex-col gap-2 p-10 transition duration-500 ease-in-out  md:h-fit md:w-2/5">
+          <h1 className="text-center font-mono text-lg md:text-xl lg:text-2xl">
             Update Your Profile
           </h1>
           <span
@@ -139,36 +141,37 @@ const Modal = ({ showModal }: any) => {
             type="text"
             name="uname"
             id="uname"
-            className="rounded-md bg-transparent text-white"
+            className="rounded-md border-gray-800 dark:border-gray-500 bg-transparent"
           />
           <label htmlFor="name">Name:</label>
           <input
             type="text"
             name="name"
             id="name"
-            className="rounded-md bg-transparent text-white"
+            className="rounded-md border-gray-800 dark:border-gray-500 bg-transparent"
           />
           <label htmlFor="bio">Bio:</label>
           <textarea
             name="bio"
             id="bio"
-            className="h-36 resize-none rounded-md bg-transparent text-white"
+            className="h-36 resize-none border-gray-800 dark:border-gray-500 rounded-md bg-transparent"
           />
           <label htmlFor="profilepic">Profile Picture:</label>
-          <div className="flex h-14 flex-row items-center justify-center gap-5 rounded-md border border-gray-500">
-            <label className="text-white">
-              <input type="file" className="hidden" name="profilepic" />
-              <span className="cursor-pointer font-semibold underline-offset-2 hover:underline">
-                Choose A File
-              </span>{" "}
-              Or Drop It Here !!
-            </label>
+          <div className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-800 dark:border-gray-500 border-dashed rounded-lg cursor-pointer bg-transparent  dark:hover:border-gray-700">
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <RiDragDropLine className=" text-2xl" />
+              <p className="mb-2 text-sm "><span className="font-semibold">Click to upload</span> or drag and drop</p>
+              <p className="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            </div>
+            <input id="profilepic" name="profilepic" type="file" className="hidden" />
           </div>
-          <button className="mt-2 w-2/3 self-center rounded-md border-2 border-white bg-transparent p-2 text-white transition duration-500 ease-in-out hover:bg-gray-300 hover:text-black">
+
+
+          <button className="mt-2 w-2/3 self-center rounded-md border-2 border-gray-800 dark:border-gray-500 bg-transparent p-2 transition duration-500 ease-in-out font-semibold hover:bg-gray-800 hover:text-white dark:hover:bg-gray-300 dark:hover:text-black">
             Save
           </button>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
