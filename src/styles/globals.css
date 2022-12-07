@@ -1,4 +1,6 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   /* #region  /**=========== Primary Color =========== */
@@ -49,6 +51,7 @@
   .glass-ws {
     @apply rounded-2xl   border-gray-300/50   bg-slate-300/30 shadow-lg shadow-slate-900/20 dark:bg-slate-900/30   dark:shadow-black/40;
   }
+
   .btn-glossy {
     @apply rounded-2xl  bg-gradient-to-r from-slate-500 to-slate-600  text-white  dark:from-gray-700 dark:to-gray-800;
   }
@@ -134,5 +137,3 @@
   background-color: gray;
   border-radius: 14px;
 }
-@tailwind components;
-@tailwind utilities;

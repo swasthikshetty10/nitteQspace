@@ -4,11 +4,20 @@ import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { BiEditAlt } from "react-icons/bi";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { trpc } from "@/utils/trpc";
 
 function Profile() {
   const { data: session, status } = useSession();
   const [modal, showModal] = useState(false);
+  const [data, setData] = useState<any>();
   const router = useRouter();
+  const data_ = trpc.user.get.useQuery({ email: session?.user?.email || "" });
+  useEffect(() => {
+    console.log(data_.data);
+    setData(data_.data);
+  }, [data_]);
+  console.log(data_);
   useEffect(() => {
     if (status === "loading") return;
     if (!session) {
@@ -23,6 +32,7 @@ function Profile() {
     console.log(e.target);
   }
   if (status === "authenticated" && session.user) {
+    console.log(session.user);
     return (
       <>
         <div className="flex flex-col gap-5 lg:flex-row">
@@ -82,7 +92,14 @@ function Profile() {
             commodi, aperiam eum animi.
           </div>
         </div>
-        <div className="flex flex-col gap-5 lg:flex-row"></div>
+        <div className="glass-wb flex flex-col items-center justify-center gap-5 p-10 ">
+          <h3>You dont have any queries yet!</h3>
+
+          <button className="delay-50 flex w-fit items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 p-3 text-center text-xl font-semibold backdrop-blur-3xl transition-all duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40">
+            <AiOutlinePlusCircle className="text-2xl" />
+            Post Query
+          </button>
+        </div>
         {modal && <Modal showModal={showModal} />}
       </>
     );
@@ -95,10 +112,20 @@ const Modal = ({ showModal }: any) => {
   function handleProfileModal() {
     showModal(false);
   }
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const data = {
+      name: e.target.name.value,
+      profilepic: e.target.profilepic.value,
+      bio: e.target.bio.value,
+    };
+  };
   return (
     <div className="fixed  -top-4 left-0 z-50 h-screen w-screen bg-transparent backdrop-blur-lg">
       <div className="flex h-full w-full items-center justify-center self-center">
-        <form className="glass-wb relative m-auto flex h-full w-full flex-col gap-2 p-10 transition duration-500 ease-in-out  md:h-fit md:w-2/5">
+        <form
+          onSubmit={handleSubmit}
+          className="glass-wb relative m-auto flex h-full w-full flex-col gap-2 p-10 transition duration-500 ease-in-out  md:h-fit md:w-2/5">
           <h1 className="text-center font-mono text-lg text-white md:text-xl lg:text-2xl">
             Update Your Profile
           </h1>
@@ -121,13 +148,6 @@ const Modal = ({ showModal }: any) => {
             id="name"
             className="rounded-md bg-transparent text-white"
           />
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            className="rounded-md bg-transparent text-white"
-          />
           <label htmlFor="bio">Bio:</label>
           <textarea
             name="bio"
@@ -144,7 +164,7 @@ const Modal = ({ showModal }: any) => {
               Or Drop It Here !!
             </label>
           </div>
-          <button className="w-2/3 self-center rounded-md border-2 border-white bg-transparent p-2 text-white transition duration-500 ease-in-out hover:bg-gray-300 hover:text-black">
+          <button className="mt-2 w-2/3 self-center rounded-md border-2 border-white bg-transparent p-2 text-white transition duration-500 ease-in-out hover:bg-gray-300 hover:text-black">
             Save
           </button>
         </form>

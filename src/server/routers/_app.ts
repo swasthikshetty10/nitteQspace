@@ -1,7 +1,11 @@
 import { z } from "zod";
 import { procedure, router } from "../trpc";
-import prisma from "@/lib/prisma";
+import { Context } from "../context";
+import { TRPCError, initTRPC } from "@trpc/server";
+import { userRouter } from "@/server/routers/user";
+export const t = initTRPC.context<Context>().create();
 export const appRouter = router({
+  user: userRouter,
   hello: procedure
     .input(
       z.object({
@@ -21,11 +25,8 @@ export const appRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const data = await prisma.user.findMany();
-
       return {
         msg: `hi from server  ${input.hello} ${input.num}`,
-        data: data,
       };
     }),
 });

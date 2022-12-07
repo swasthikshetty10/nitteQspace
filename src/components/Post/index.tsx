@@ -17,7 +17,7 @@ function Post({ postId }: { postId: string }) {
           <div className="flex items-center justify-between ">
             <div className=" text-md flex items-center text-sm font-bold sm:gap-2">
               <Avatar
-                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                img="https://avatars.githubusercontent.com/u/62538932?v=4"
                 rounded={true}
                 color="gray"
                 className="scale-75 sm:scale-95"
@@ -138,7 +138,7 @@ const Comments = ({ children }: any) => {
         <div className="inline-flex w-full min-w-fit items-center  gap-3">
           <div className="inline-flex items-center gap-2">
             <Avatar
-              img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+              img="https://avatars.githubusercontent.com/u/62538932?v=4"
               rounded={true}
               color="gray"
               className="min-w-fit scale-75 sm:scale-95"

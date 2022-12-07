@@ -23,7 +23,7 @@ function SideBar() {
   );
 
   return (
-    <div className="absolute bottom-0 left-0 z-50 mb-2 flex h-fit   w-full items-center justify-center px-2  md:sticky md:mb-0  md:h-full md:w-fit  md:px-0 2xl:fixed 2xl:top-0 2xl:left-5 2xl:bottom-0   ">
+    <div className="sticky bottom-2 left-0 z-50  flex h-fit   w-full items-center justify-center   md:sticky md:mb-0  md:h-full md:w-fit  md:px-0 2xl:fixed 2xl:top-0 2xl:left-5 2xl:bottom-0   ">
       <div className=" glass-wb flex flex-1 items-center justify-evenly gap-5 p-5 text-4xl   sm:justify-center md:flex-col md:gap-10">
         <Link href="/home" passHref legacyBehavior>
           <Icon active={router.pathname === "/home"}>

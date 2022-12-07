@@ -9,13 +9,10 @@ export default function HomePage() {
   if (!hello.data) {
     return <div>Loading...</div>;
   }
-  const data = trpc.test.useQuery({ hello: "welcome" });
-  React.useEffect(() => {
-    console.log(data.data?.data);
-  }, [data]);
+  const data = trpc.test.useQuery({ hello: "Test" });
+  React.useEffect(() => {}, [data]);
 
   return (
- 
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
