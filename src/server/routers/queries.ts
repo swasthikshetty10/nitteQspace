@@ -174,6 +174,23 @@ export const postRouter = router({
             },
           });
           return vote;
+        } else {
+          const vote = await ctx.prisma.vote.create({
+            data: {
+              user: {
+                connect: {
+                  email: ctx.session.user?.email || "",
+                },
+              },
+              post: {
+                connect: {
+                  id: input.postId,
+                },
+              },
+              upvote: input.upVote,
+            },
+          });
+          return vote;
         }
       }
       if (input.threadId) {
@@ -194,6 +211,23 @@ export const postRouter = router({
               },
             },
             data: {
+              upvote: input.upVote,
+            },
+          });
+          return vote;
+        } else {
+          const vote = await ctx.prisma.vote.create({
+            data: {
+              user: {
+                connect: {
+                  email: ctx.session.user?.email || "",
+                },
+              },
+              thread: {
+                connect: {
+                  id: input.threadId,
+                },
+              },
               upvote: input.upVote,
             },
           });
@@ -264,12 +298,40 @@ export const postRouter = router({
       }
     }),
   getPostVotes: procedure.input(z.number()).query(async ({ input, ctx }) => {
-    const votes = await ctx.prisma.vote.count({
+    const upCount = await ctx.prisma.vote.count({
       where: {
         postId: input,
+        upvote: true,
       },
     });
-    return votes;
+
+    const downCount = await ctx.prisma.vote.count({
+      where: {
+        postId: input,
+        upvote: false,
+      },
+    });
+    const count = upCount - downCount;
+    if (ctx.session) {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          email: ctx.session.user?.email || "",
+        },
+      });
+      const vote = await ctx.prisma.vote.findUnique({
+        where: {
+          postId_userId: {
+            postId: input,
+            userId: user?.id || "",
+          },
+        },
+      });
+      if (vote) {
+        return { count, vote };
+      } else {
+        return { count, vote: null };
+      }
+    }
   }),
   getThreadVotes: procedure.input(z.number()).query(async ({ input, ctx }) => {
     const votes = await ctx.prisma.vote.count({
