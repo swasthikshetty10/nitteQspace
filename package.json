@@ -28,6 +28,7 @@
     "@trpc/server": "^10.4.2",
     "@types/node": "^18.11.9",
     "clsx": "^1.2.1",
+    "date-fns": "^2.29.3",
     "flowbite": "^1.5.4",
     "flowbite-react": "^0.3.6",
     "markdown-to-jsx": "^7.1.7",

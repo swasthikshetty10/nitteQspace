@@ -10,6 +10,7 @@ import Tenor from "react-tenor";
 import { MdOutlineGif } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
 import { trpc } from "@/utils/trpc";
+import { getDateAgoString, getTimeInAMPM } from "@/utils/dateTime";
 type PostProps = {
   id: number;
   title: string;
@@ -48,8 +49,9 @@ function Post({ post }: { post: any }) {
               />
               <a>{post.author.name}</a>
             </div>
-            <Badge color={"gray"} icon={HiClock}>
-              3 days ago
+            <Badge color={"gray"} className="px-2" icon={HiClock}>
+              {getDateAgoString(post.createdAt)}{" "}
+              {getTimeInAMPM(new Date(post.createdAt))}
             </Badge>
           </div>
           <div className="inline-flex w-full items-center justify-between gap-5 text-sm  sm:justify-start">
@@ -115,11 +117,9 @@ function Post({ post }: { post: any }) {
 export default Post;
 
 const Comments = ({
-  children,
   postId,
   threadId,
 }: {
-  children?: any;
   postId?: number;
   threadId?: number;
 }) => {
@@ -145,10 +145,11 @@ const Comments = ({
                 {comment.author.name}
               </div>
               <Badge
-                className="whitespace-nowrap"
+                className="whitespace-nowrap px-2"
                 color={"gray"}
                 icon={HiClock}>
-                3 days ago
+                {getDateAgoString(comment.createdAt)}{" "}
+                {getTimeInAMPM(new Date(comment.createdAt))}
               </Badge>
             </div>
             <div className="inline-flex gap-1 ">
@@ -170,8 +171,8 @@ const Comments = ({
                 <p>{comment.content}</p>
               </div>
             </div>
-            <CommentBox threadId={0} />
-            {children}
+            <CommentBox threadId={comment.id} />
+            <Comments threadId={comment.id} />
           </div>
         );
       })}
