@@ -2,15 +2,17 @@ import { Head } from "next/document";
 import React from "react";
 import Post from "@/components/Post";
 import { Card } from "flowbite-react";
+import { trpc } from "@/utils/trpc";
 function Home() {
+  const posts = trpc.post.getQuery.useQuery();
+  if (!posts.data) return <div>Loading...</div>;
   return (
     <>
       <div className="glass-wb flex w-full   max-w-7xl items-start gap-5   overflow-x-hidden p-2 sm:p-5">
         <div className="xs:max-h-[70vh] max-h-[72vh] w-full space-y-14 overflow-y-auto rounded-xl sm:max-h-[70vh] md:max-h-[75vh]">
-          <Post postId="" />
-          <Post postId="" />
-          <Post postId="" />
-          <Post postId="" />
+          {posts.data.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
         </div>
         <div className=" glass-ws  xs:h-[70vh] hidden h-[72vh]  w-full min-w-[20vw] max-w-[20vw] flex-col items-center justify-center space-y-5  overflow-y-hidden p-5 sm:h-[70vh]  md:h-[75vh] lg:block">
           <div className="space-y-2  pb-5 font-semibold">

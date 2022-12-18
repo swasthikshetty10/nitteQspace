@@ -86,7 +86,7 @@ model Category {
 model Post {
   id         Int      @id @default(autoincrement())
   title      String
-  content    String   @db.Text
+  content    String?  @db.Text
   images     Json?
   anonymous  Boolean  @default(false)
   votes      Int      @default(0)
@@ -107,7 +107,6 @@ model Thread {
   id        Int      @id @default(autoincrement())
   content   String   @db.Text
   votes     Int      @default(0)
-  threadId  Int      @map("thread_id")
   anonymous Boolean  @default(false)
   published Boolean  @default(false)
   author    User     @relation(fields: [authorId], references: [id])

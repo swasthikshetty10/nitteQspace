@@ -1,4 +1,5 @@
 import FileDropzone from "@/components/FileUpload";
+import { trpc } from "@/utils/trpc";
 import {
   Button,
   Carousel,
@@ -13,13 +14,29 @@ import { BsInfoCircleFill } from "react-icons/bs";
 
 function Query() {
   const [files, setFiles] = useState<any>([]);
+  const utils = trpc.useContext();
+  const mutation = trpc.post.addQuery.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+      utils.post.getQuery.invalidate();
+    },
+  });
   function handleSubmit(e: any) {
     e.preventDefault();
     console.log(e.target.title.value);
     console.log(e.target.query.value);
     console.log(e.target.anonymous.checked);
     console.log(files);
+    const images = files.map((file: any) => file.url);
+    const formData = {
+      title: e.target.title.value as string,
+      content: e.target.query.value as string,
+      anonymous: e.target.anonymous.checked as boolean,
+      images: images as string[],
+    };
+    mutation.mutateAsync(formData);
   }
+
   return (
     <div className="glass-wb flex w-full justify-center py-10 px-2">
       <form
@@ -31,6 +48,7 @@ function Query() {
           </div>
           <TextInput
             id="title"
+            aria-required={true}
             type="text"
             placeholder="Title of your query"
             required={true}
@@ -55,6 +73,7 @@ function Query() {
           <Textarea
             id="query"
             placeholder="Type your query..."
+            aria-required={true}
             required={true}
             rows={4}
           />

@@ -11,6 +11,7 @@ import { trpc } from "@/utils/trpc";
 import { uploadFile } from "@/utils/fileUpload";
 import FileDropzone, { FileUploadWithProgress } from "@/components/FileUpload";
 import { Avatar } from "flowbite-react";
+import Link from "next/link";
 
 function Profile() {
   const { data: session, status } = useSession();
@@ -83,10 +84,12 @@ function Profile() {
       <div className="glass-wb flex flex-col items-center justify-center gap-5 p-10 ">
         <h3>You dont have any queries yet!</h3>
 
-        <button className="delay-50 flex w-fit items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 p-3 text-center text-xl font-semibold backdrop-blur-3xl transition-all duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40">
+        <Link
+          href="/query"
+          className="delay-50 flex w-fit items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 p-3 text-center text-xl font-semibold backdrop-blur-3xl transition-all duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40">
           <AiOutlinePlusCircle className="text-2xl" />
           Post Query
-        </button>
+        </Link>
       </div>
       {modal && <Modal showModal={showModal} data={user.data} />}
     </>

@@ -8,8 +8,32 @@ import { FaShare } from "react-icons/fa";
 import { HiClock, HiCode, HiOutlineSave, HiX } from "react-icons/hi";
 import Tenor from "react-tenor";
 import { MdOutlineGif } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
+import { trpc } from "@/utils/trpc";
+type PostProps = {
+  id: number;
+  title: string;
+  content: string;
+  images: string[];
+  anonymous: boolean;
+  votes: number;
+  published: boolean;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  categoryId: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
-function Post({ postId }: { postId: string }) {
+function Post({ post }: { post: any }) {
+  console.log(post);
+  const postComment = () => {};
   return (
     <>
       <div className="glass-ws flex w-full  flex-col gap-2 p-3 sm:p-5 ">
@@ -17,19 +41,19 @@ function Post({ postId }: { postId: string }) {
           <div className="flex items-center justify-between ">
             <div className=" text-md flex items-center text-sm font-bold sm:gap-2">
               <Avatar
-                img="https://avatars.githubusercontent.com/u/62538932?v=4"
+                img={post.author.image}
                 rounded={true}
                 color="gray"
                 className="scale-75 sm:scale-95"
               />
-              <a>Swasthik</a>
+              <a>{post.author.name}</a>
             </div>
             <Badge color={"gray"} icon={HiClock}>
               3 days ago
             </Badge>
           </div>
           <div className="inline-flex w-full items-center justify-between gap-5 text-sm  sm:justify-start">
-            <h2>Lol! This is a card</h2>
+            <h2>{post.title}</h2>
             <a className="h-min rounded-xl bg-slate-800 px-4 py-0.5  font-semibold text-slate-200 dark:bg-slate-100 dark:text-slate-800 md:py-1">
               CSE
             </a>
@@ -37,26 +61,9 @@ function Post({ postId }: { postId: string }) {
         </div>
         <div className="h-56 w-auto  sm:h-64 xl:h-80 2xl:h-96">
           <Carousel slideInterval={5000}>
-            <img
-              src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-              alt="..."
-            />
-            <img
-              src="https://flowbite.com/docs/images/carousel/carousel-2.svg"
-              alt="..."
-            />
-            <img
-              src="https://flowbite.com/docs/images/carousel/carousel-3.svg"
-              alt="..."
-            />
-            <img
-              src="https://flowbite.com/docs/images/carousel/carousel-4.svg"
-              alt="..."
-            />
-            <img
-              src="https://flowbite.com/docs/images/carousel/carousel-5.svg"
-              alt="..."
-            />
+            {post.images.map((img: any, i: any) => (
+              <img src={img} alt="image" key={i} />
+            ))}
           </Carousel>
         </div>
         <div className="flex w-full items-center justify-between p-2 ">
@@ -66,7 +73,7 @@ function Post({ postId }: { postId: string }) {
                 {true ? <ImArrowUp className="scale-90" /> : <BiUpvote />}
               </button>
               <a className="text-md  font-semibold ">
-                1.2k
+                {post.votes}
                 <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
                   votes
                 </span>
@@ -94,34 +101,11 @@ function Post({ postId }: { postId: string }) {
           </div>
         </div>
         <div className="p-2">
-          <p>
-            lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            tincidunt, nisl nec ultricies lacinia, nisl nunc aliquam nisl, nec
-            lacinia nisl nunc vel nisl. Nullam tincidunt, nisl nec ultricies
-          </p>
+          <p>{post.content}</p>
         </div>
         <div className="overflow-x-scroll">
-          <Comments>
-            <Comments>
-              <Comments>
-                <Comments></Comments>
-              </Comments>
-              <Comments>
-                <Comments>
-                  <Comments></Comments>
-                </Comments>
-              </Comments>
-            </Comments>
-          </Comments>
-          <Comments>
-            <Comments />
-          </Comments>
-          <Comments>
-            <Comments />
-          </Comments>
-          <Comments>
-            <Comments />
-          </Comments>
+          <CommentBox postId={post.id} />
+          <Comments postId={post.id}></Comments>
         </div>
       </div>
     </>
@@ -130,58 +114,105 @@ function Post({ postId }: { postId: string }) {
 
 export default Post;
 
-const Comments = ({ children }: any) => {
+const Comments = ({
+  children,
+  postId,
+  threadId,
+}: {
+  children?: any;
+  postId?: number;
+  threadId?: number;
+}) => {
+  const comments = trpc.post.getComments.useQuery({ postId, threadId });
+  if (!comments.data) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
-      <div className="w-full px-5"></div>
-      <div className="flex-flex-col min-w-fit  border-l-2 border-gray-900/20 p-5 dark:border-gray-100/20">
-        <div className="inline-flex w-full min-w-fit items-center  gap-3">
-          <div className="inline-flex items-center gap-2">
-            <Avatar
-              img="https://avatars.githubusercontent.com/u/62538932?v=4"
-              rounded={true}
-              color="gray"
-              className="min-w-fit scale-75 sm:scale-95"
-            />{" "}
-            swasthik
+      {comments.data.map((comment) => {
+        return (
+          <div
+            key={comment.id}
+            className="flex-flex-col min-w-fit  border-l-2 border-gray-900/20 p-5 dark:border-gray-100/20">
+            <div className="inline-flex w-full min-w-fit items-center  gap-3">
+              <div className="inline-flex items-center gap-2">
+                <Avatar
+                  img={comment.author.image || undefined}
+                  rounded={true}
+                  color="gray"
+                  className="min-w-fit scale-75 sm:scale-95"
+                />
+                {comment.author.name}
+              </div>
+              <Badge
+                className="whitespace-nowrap"
+                color={"gray"}
+                icon={HiClock}>
+                3 days ago
+              </Badge>
+            </div>
+            <div className="inline-flex gap-1 ">
+              <button className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
+                {true ? <ImArrowUp className="scale-90" /> : <BiUpvote />}
+              </button>
+              <a className="text-md  font-semibold ">
+                {comment.votes}
+                <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
+                  votes
+                </span>
+              </a>
+              <button className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
+                {false ? <ImArrowDown className="scale-90" /> : <BiDownvote />}
+              </button>
+            </div>
+            <div className="pb-3 ">
+              <div>
+                <p>{comment.content}</p>
+              </div>
+            </div>
+            <CommentBox threadId={0} />
+            {children}
           </div>
-          <Badge className="whitespace-nowrap" color={"gray"} icon={HiClock}>
-            3 days ago
-          </Badge>
-        </div>
-        <div className="inline-flex gap-1 ">
-          <button className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
-            {true ? <ImArrowUp className="scale-90" /> : <BiUpvote />}
-          </button>
-          <a className="text-md  font-semibold ">
-            1.2k
-            <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
-              votes
-            </span>
-          </a>
-          <button className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
-            {false ? <ImArrowDown className="scale-90" /> : <BiDownvote />}
-          </button>
-        </div>
-        <div className="pb-3 ">
-          <div>
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente
-              id nisi reprehenderit a laborum minus incidunt impedit ab cum
-              provident labore modi
-            </p>
-            <CommentBox />
-          </div>
-        </div>
-        {children}
-      </div>
+        );
+      })}
     </div>
   );
 };
 
-const CommentBox = () => {
+const CommentBox = ({
+  threadId,
+  postId,
+}: {
+  threadId?: number;
+  postId?: number;
+}) => {
   const [show, setShow] = useState(false);
   const [showGif, setShowGif] = useState(false);
+  const [comment, setComment] = useState("");
+  const [gif, setGif] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const utils = trpc.useContext();
+  const mutation = trpc.post.addComment.useMutation({
+    onSuccess: () => {
+      setShow(false);
+      setComment("");
+      setGif("");
+      setImages([]);
+      utils.post.getComments.invalidate();
+    },
+  });
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(comment);
+    console.log(gif);
+    console.log(images);
+    mutation.mutate({
+      threadId: threadId,
+      content: comment,
+      postId: postId,
+    });
+  };
+
   return (
     <>
       {!show ? (
@@ -189,12 +220,16 @@ const CommentBox = () => {
           onClick={() => setShow(true)}
           className="my-3 flex items-center gap-1 opacity-80 hover:opacity-100">
           <BiComment className="text-xl sm:text-2xl" />
-          <a className="text-md hidden font-semibold sm:block">Comments</a>
-          <a className="text-sm font-semibold text-gray-400">3</a>
+          <a className="text-md hidden font-semibold sm:block">Add Comment</a>
         </button>
       ) : (
         <>
-          <form className="mt-3">
+          <form onSubmit={handleSubmit} className="relative mt-3">
+            <button
+              onClick={() => setShow(false)}
+              className="absolute top-3 right-2 p-2 transition-all hover:scale-110">
+              <AiOutlineClose />
+            </button>
             <div className="mb-4 w-full rounded-lg border border-gray-200 bg-slate-100/80  dark:border-gray-600 dark:bg-gray-700">
               <div className="rounded-t-lg bg-slate-100/80 px-4 py-2 dark:bg-gray-800">
                 <label htmlFor="comment" className="sr-only">
@@ -202,6 +237,8 @@ const CommentBox = () => {
                 </label>
                 <textarea
                   id="comment"
+                  onChange={(e) => setComment(e.target.value)}
+                  value={comment}
                   rows={4}
                   className="w-full border-0 bg-slate-200/50 p-2  text-sm text-gray-900 focus:ring-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
                   placeholder="Write a comment..."
