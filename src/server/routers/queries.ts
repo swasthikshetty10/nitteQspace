@@ -1,5 +1,5 @@
 import { router, procedure } from "../trpc";
-import { z } from "zod";
+import { optional, z } from "zod";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { Context } from "@/server/context";
 import { threadId } from "worker_threads";
@@ -11,6 +11,7 @@ export const postRouter = router({
         content: z.string(),
         images: z.array(z.string()).optional(),
         anonymous: z.boolean().optional(),
+        category: z.number().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -27,21 +28,53 @@ export const postRouter = router({
               email: ctx.session.user?.email || "",
             },
           },
-          ...input,
+          category: {
+            connect: {
+              id: input.category || 1,
+            },
+          },
+          title: input.title,
+          content: input.content,
+          images: input.images,
+          anonymous: input.anonymous,
           published: true,
         },
       });
       return post;
     }),
   getQuery: procedure
-    .input(z.string().optional())
+    .input(
+      z
+        .object({
+          userId: z.string().optional(),
+          category: z.number().optional(),
+        })
+        .optional()
+    )
     .query(async ({ input, ctx }) => {
+      if (input?.userId) {
+        const post = await ctx.prisma.post.findMany({
+          orderBy: {
+            createdAt: "desc",
+          },
+          where: {
+            published: true,
+            authorId: input.userId,
+            categoryId: input.category,
+          },
+          include: {
+            author: true,
+          },
+        });
+        return post;
+      }
       const post = await ctx.prisma.post.findMany({
         orderBy: {
           createdAt: "desc",
         },
         where: {
           published: true,
+          categoryId: input?.category,
         },
         include: {
           author: true,
@@ -366,5 +399,9 @@ export const postRouter = router({
       }
     }
     return { count, vote: null };
+  }),
+  getCategories: procedure.query(async ({ ctx }) => {
+    const category = await ctx.prisma.category.findMany();
+    return category;
   }),
 });

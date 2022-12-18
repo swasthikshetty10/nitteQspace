@@ -59,13 +59,15 @@ function Post({ post }: { post: any }) {
             </a>
           </div>
         </div>
-        <div className="h-56 w-auto  sm:h-64 xl:h-80 2xl:h-96">
-          <Carousel slideInterval={5000}>
-            {post.images.map((img: any, i: any) => (
-              <img src={img} alt="image" key={i} />
-            ))}
-          </Carousel>
-        </div>
+        {post.images.length > 0 && (
+          <div className="h-56 w-auto  sm:h-64 xl:h-80 2xl:h-96">
+            <Carousel slideInterval={5000}>
+              {post.images.map((img: any, i: any) => (
+                <img src={img} alt="image" key={i} />
+              ))}
+            </Carousel>
+          </div>
+        )}
         <div className="flex w-full items-center justify-between p-2 ">
           <div className="flex  items-center gap-5">
             <PostVotes postId={post.id} />

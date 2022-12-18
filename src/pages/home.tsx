@@ -1,10 +1,12 @@
 import { Head } from "next/document";
-import React from "react";
+import React, { useState } from "react";
 import Post from "@/components/Post";
 import { Card } from "flowbite-react";
 import { trpc } from "@/utils/trpc";
 function Home() {
-  const posts = trpc.post.getQuery.useQuery();
+  const [cat, setBranch] = useState<undefined | number>(undefined);
+  const posts = trpc.post.getQuery.useQuery({ category: cat });
+  const categories = trpc.post.getCategories.useQuery();
   if (!posts.data) return <div>Loading...</div>;
   return (
     <>
@@ -18,30 +20,49 @@ function Home() {
           <div className="space-y-2  pb-5 font-semibold">
             <a>Resources</a>
             <div className="flex w-full flex-wrap gap-2 ">
-              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
-                #1stYear
-              </Badge>
-              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
-                #3rdSem
-              </Badge>
-              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
-                #5thSem
-              </Badge>
-              <Badge className="rounded-lg bg-black bg-opacity-10 px-2 py-1">
-                #7thSem
-              </Badge>
+              {categories.data &&
+                categories.data.map((category) => {
+                  if (category.type === "RESOURCES") {
+                    return (
+                      <Badge
+                        onClick={() => {
+                          if (category.id == cat) {
+                            setBranch(undefined);
+                            return;
+                          }
+                          setBranch(category.id);
+                        }}
+                        selected={cat == category.id}
+                        key={category.id}>
+                        {category.name}
+                      </Badge>
+                    );
+                  }
+                })}
             </div>
           </div>
           <div className="space-y-2 font-semibold">
             <a>Branches</a>
             <div className="flex w-full flex-wrap gap-2 ">
-              <Badge>CSE</Badge>
-              <Badge>ISE</Badge>
-              <Badge>ENC</Badge>
-              <Badge>AIML</Badge>
-              <Badge>CCE</Badge>
-              <Badge>MECH</Badge>
-              <Badge>EE</Badge>
+              {categories.data &&
+                categories.data?.map((category) => {
+                  if (category.type === "BRANCH") {
+                    return (
+                      <Badge
+                        onClick={() => {
+                          if (category.id == cat) {
+                            setBranch(undefined);
+                            return;
+                          }
+                          setBranch(category.id);
+                        }}
+                        selected={cat == category.id}
+                        key={category.id}>
+                        {category.name}
+                      </Badge>
+                    );
+                  }
+                })}
             </div>
           </div>
           <RecentPosts />
@@ -53,11 +74,16 @@ function Home() {
 
 export default Home;
 
-const Badge = ({ children, className }: any) => {
+const Badge = ({ selected, onClick, children, className }: any) => {
   return (
     <div
+      onClick={onClick}
       className={
-        "bg w-fit cursor-pointer rounded-md bg-gray-300 px-3 py-1 text-sm font-semibold hover:bg-gray-900 hover:text-gray-300 dark:bg-gray-900 dark:hover:bg-gray-300 dark:hover:text-gray-900 " +
+        `bg w-fit cursor-pointer rounded-md ${
+          selected
+            ? "bg-gray-100 dark:bg-slate-700"
+            : "bg-gray-300 dark:bg-gray-900"
+        }  px-3 py-1 text-sm font-semibold hover:bg-gray-900 hover:text-gray-300  dark:hover:bg-gray-300 dark:hover:text-gray-900 ` +
         className
       }>
       {children}
