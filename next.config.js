@@ -4,7 +4,10 @@ const nextConfig = {
 
   reactStrictMode: true,
   swcMinify: true,
-
+  eslint: {
+    dirs: ['src'],
+    ignoreDuringBuilds: true,
+  },
   //Uncoment to add domain whitelist
   images: {
     remotePatterns: [

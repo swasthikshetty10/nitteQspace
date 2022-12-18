@@ -1,4 +1,3 @@
-import { Head } from "next/document";
 import React, { useState } from "react";
 import Post from "@/components/Post";
 import { Card } from "flowbite-react";

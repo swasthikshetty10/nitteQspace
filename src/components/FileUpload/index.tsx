@@ -1,7 +1,6 @@
 import { uploadFile } from "@/utils/fileUpload";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { AiOutlineFileText } from "react-icons/ai";
 import { MdClear } from "react-icons/md";
 import { RiDragDropLine } from "react-icons/ri";
 export default function FileDropzone({ files, setFiles }: any) {
@@ -102,7 +101,7 @@ const FileErrorHandler = ({ fileWrapper, onDelete }: any) => (
     </div>
     <div className="inline-flex gap-5 overflow-hidden">
       {fileWrapper.errors.map((item: any, idx: any) => (
-        <span id={idx} className="text-sm text-red-500 ">
+        <span key={idx} className="text-sm text-red-500 ">
           {item.code}
         </span>
       ))}
