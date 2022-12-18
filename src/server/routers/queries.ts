@@ -328,17 +328,43 @@ export const postRouter = router({
       });
       if (vote) {
         return { count, vote };
-      } else {
-        return { count, vote: null };
       }
     }
+    return { count, vote: null };
   }),
   getThreadVotes: procedure.input(z.number()).query(async ({ input, ctx }) => {
-    const votes = await ctx.prisma.vote.count({
+    const upCount = await ctx.prisma.vote.count({
       where: {
         threadId: input,
+        upvote: true,
       },
     });
-    return votes;
+
+    const downCount = await ctx.prisma.vote.count({
+      where: {
+        threadId: input,
+        upvote: false,
+      },
+    });
+    const count = upCount - downCount;
+    if (ctx.session) {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          email: ctx.session.user?.email || "",
+        },
+      });
+      const vote = await ctx.prisma.vote.findUnique({
+        where: {
+          threadId_userId: {
+            threadId: input,
+            userId: user?.id || "",
+          },
+        },
+      });
+      if (vote) {
+        return { count, vote };
+      }
+    }
+    return { count, vote: null };
   }),
 });

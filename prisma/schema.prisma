@@ -90,7 +90,6 @@ model Post {
   content    String?  @db.Text
   images     Json?
   anonymous  Boolean  @default(false)
-  votes      Int      @default(0)
   published  Boolean  @default(false)
   author     User     @relation(fields: [authorId], references: [id])
   authorId   String
@@ -108,7 +107,6 @@ model Post {
 model Thread {
   id        Int      @id @default(autoincrement())
   content   String   @db.Text
-  votes     Int      @default(0)
   anonymous Boolean  @default(false)
   published Boolean  @default(false)
   author    User     @relation(fields: [authorId], references: [id])

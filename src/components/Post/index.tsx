@@ -33,33 +33,6 @@ type PostProps = {
 };
 
 function Post({ post }: { post: any }) {
-  const votes = trpc.post.getPostVotes.useQuery(post.id);
-  const utils = trpc.useContext();
-  const upVote = trpc.post.addVote.useMutation({
-    onSuccess: () => {
-      votes.refetch();
-    },
-  });
-  const unVote = trpc.post.unVote.useMutation({
-    onSuccess: () => {
-      votes.refetch();
-    },
-  });
-  const handleUpvote = () => {
-    if (votes.data?.vote && votes.data?.vote?.upvote) {
-      unVote.mutate({ postId: post.id });
-      return;
-    }
-    upVote.mutate({ postId: post.id, upVote: true });
-  };
-  const handleDownvote = () => {
-    if (votes.data?.vote && !votes.data?.vote?.upvote) {
-      unVote.mutate({ postId: post.id });
-      return;
-    }
-    upVote.mutate({ postId: post.id, upVote: false });
-  };
-
   return (
     <>
       <div className="glass-ws flex w-full  flex-col gap-2 p-3 sm:p-5 ">
@@ -95,31 +68,7 @@ function Post({ post }: { post: any }) {
         </div>
         <div className="flex w-full items-center justify-between p-2 ">
           <div className="flex  items-center gap-5">
-            <div className="inline-flex gap-1 ">
-              <button
-                onClick={handleUpvote}
-                className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
-                {votes.data?.vote && votes.data?.vote?.upvote ? (
-                  <ImArrowUp className="scale-90" />
-                ) : (
-                  <BiUpvote />
-                )}
-              </button>
-              <a className="text-md  font-semibold ">
-                <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
-                  {votes.data ? votes.data.count : 0}
-                </span>
-              </a>
-              <button
-                onClick={handleDownvote}
-                className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
-                {votes.data?.vote && !votes.data?.vote?.upvote ? (
-                  <ImArrowDown className="scale-90" />
-                ) : (
-                  <BiDownvote />
-                )}
-              </button>
-            </div>
+            <PostVotes postId={post.id} />
             <button className="flex items-center gap-1 opacity-80 hover:opacity-100">
               <BiComment className="text-xl sm:text-2xl" />
               <a className="text-md hidden font-semibold sm:block">Comments</a>
@@ -149,6 +98,115 @@ function Post({ post }: { post: any }) {
     </>
   );
 }
+
+const PostVotes = ({ postId }: { postId: number }) => {
+  const votes = trpc.post.getPostVotes.useQuery(postId);
+  const upVote = trpc.post.addVote.useMutation({
+    onSuccess: () => {
+      votes.refetch();
+    },
+  });
+  const unVote = trpc.post.unVote.useMutation({
+    onSuccess: () => {
+      votes.refetch();
+    },
+  });
+  const handleUpvote = () => {
+    if (votes.data?.vote && votes.data?.vote?.upvote) {
+      unVote.mutate({ postId: postId });
+      return;
+    }
+    upVote.mutate({ postId: postId, upVote: true });
+  };
+  const handleDownvote = () => {
+    if (votes.data?.vote && !votes.data?.vote?.upvote) {
+      unVote.mutate({ postId: postId });
+      return;
+    }
+    upVote.mutate({ postId: postId, upVote: false });
+  };
+  return (
+    <div className="inline-flex gap-1 ">
+      <button
+        onClick={handleUpvote}
+        className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
+        {votes.data?.vote && votes.data?.vote?.upvote ? (
+          <ImArrowUp className="scale-90" />
+        ) : (
+          <BiUpvote />
+        )}
+      </button>
+      <a className="text-md  font-semibold ">
+        <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
+          {votes.data ? votes.data.count : "-"}
+        </span>
+      </a>
+      <button
+        onClick={handleDownvote}
+        className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
+        {votes.data?.vote && !votes.data?.vote?.upvote ? (
+          <ImArrowDown className="scale-90" />
+        ) : (
+          <BiDownvote />
+        )}
+      </button>
+    </div>
+  );
+};
+const ThreadVotes = ({ threadId }: { threadId: number }) => {
+  const votes = trpc.post.getThreadVotes.useQuery(threadId);
+  const upVote = trpc.post.addVote.useMutation({
+    onSuccess: () => {
+      votes.refetch();
+    },
+  });
+  const unVote = trpc.post.unVote.useMutation({
+    onSuccess: () => {
+      votes.refetch();
+    },
+  });
+  const handleUpvote = () => {
+    if (votes.data?.vote && votes.data?.vote?.upvote) {
+      unVote.mutate({ threadId: threadId });
+      return;
+    }
+    upVote.mutate({ threadId: threadId, upVote: true });
+  };
+  const handleDownvote = () => {
+    if (votes.data?.vote && !votes.data?.vote?.upvote) {
+      unVote.mutate({ threadId: threadId });
+      return;
+    }
+    upVote.mutate({ threadId: threadId, upVote: false });
+  };
+  return (
+    <div className="inline-flex gap-1 ">
+      <button
+        onClick={handleUpvote}
+        className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
+        {votes.data?.vote && votes.data?.vote?.upvote ? (
+          <ImArrowUp className="scale-90" />
+        ) : (
+          <BiUpvote />
+        )}
+      </button>
+      <a className="text-md  font-semibold ">
+        <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
+          {votes.data ? votes.data.count : "-"}
+        </span>
+      </a>
+      <button
+        onClick={handleDownvote}
+        className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
+        {votes.data?.vote && !votes.data?.vote?.upvote ? (
+          <ImArrowDown className="scale-90" />
+        ) : (
+          <BiDownvote />
+        )}
+      </button>
+    </div>
+  );
+};
 
 export default Post;
 
@@ -188,20 +246,7 @@ const Comments = ({
                 {getTimeInAMPM(new Date(comment.createdAt))}
               </Badge>
             </div>
-            <div className="inline-flex gap-1 ">
-              <button className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
-                {true ? <ImArrowUp className="scale-90" /> : <BiUpvote />}
-              </button>
-              <a className="text-md  font-semibold ">
-                {comment.votes}
-                <span className="ml-0.5 -mt-2 text-sm font-semibold text-gray-400">
-                  votes
-                </span>
-              </a>
-              <button className="text-xl opacity-80 hover:opacity-100 sm:text-2xl">
-                {false ? <ImArrowDown className="scale-90" /> : <BiDownvote />}
-              </button>
-            </div>
+            <ThreadVotes threadId={comment.id} />
             <div className="pb-3 ">
               <div>
                 <p>{comment.content}</p>
