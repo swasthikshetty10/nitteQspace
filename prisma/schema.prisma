@@ -57,6 +57,7 @@ model User {
   follower      Follow[]  @relation("follower")
   following     Follow[]  @relation("following")
   Thread        Thread[]
+  vote          vote[]
 
   @@map("users")
 }
@@ -98,6 +99,7 @@ model Post {
   Thread     Thread[]
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
+  vote       vote[]
 
   @@index([authorId])
   @@index([categoryId])
@@ -118,6 +120,7 @@ model Thread {
   child     Thread[] @relation("ThreadToThread")
   Post      Post?    @relation(fields: [postId], references: [id])
   postId    Int?
+  vote      vote[]
 
   @@index([parentId])
   @@index([postId])
@@ -150,4 +153,24 @@ model Resources {
 
   @@index([categoryId])
   @@map("resources")
+}
+
+model vote {
+  id        Int      @id @default(autoincrement())
+  postId    Int?     @map("post_id")
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  threadId  Int?     @map("thread_id")
+  thread    Thread?  @relation(fields: [threadId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  upvote    Boolean  @default(false)
+
+  @@unique([postId, userId])
+  @@unique([threadId, userId])
+  @@index([postId])
+  @@index([threadId])
+  @@index([userId])
+  @@map("votes")
 }

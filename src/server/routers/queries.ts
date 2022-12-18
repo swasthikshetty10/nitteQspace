@@ -132,12 +132,151 @@ export const postRouter = router({
       });
       return comments;
     }),
-  addVote: procedure.input(z.number()).mutation(async ({ input, ctx }) => {
-    if (!ctx.session) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Not authenticated",
+  addVote: procedure
+    .input(
+      z.object({
+        postId: z.number().optional(),
+        threadId: z.number().optional(),
+        upVote: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.session) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authenticated",
+        });
+      }
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          email: ctx.session.user?.email || "",
+        },
       });
-    }
+      if (input.postId) {
+        const voteExists = await ctx.prisma.vote.findUnique({
+          where: {
+            postId_userId: {
+              postId: input.postId,
+              userId: user?.id || "",
+            },
+          },
+        });
+        if (voteExists) {
+          const vote = await ctx.prisma.vote.update({
+            where: {
+              postId_userId: {
+                postId: input.postId,
+                userId: user?.id || "",
+              },
+            },
+            data: {
+              upvote: input.upVote,
+            },
+          });
+          return vote;
+        }
+      }
+      if (input.threadId) {
+        const voteExists = await ctx.prisma.vote.findUnique({
+          where: {
+            threadId_userId: {
+              threadId: input.threadId,
+              userId: user?.id || "",
+            },
+          },
+        });
+        if (voteExists) {
+          const vote = await ctx.prisma.vote.update({
+            where: {
+              threadId_userId: {
+                threadId: input.threadId,
+                userId: user?.id || "",
+              },
+            },
+            data: {
+              upvote: input.upVote,
+            },
+          });
+          return vote;
+        }
+      }
+    }),
+  unVote: procedure
+    .input(
+      z.object({
+        postId: z.number().optional(),
+        threadId: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.session) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authenticated",
+        });
+      }
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          email: ctx.session.user?.email || "",
+        },
+      });
+      if (input.postId) {
+        const voteExists = await ctx.prisma.vote.findUnique({
+          where: {
+            postId_userId: {
+              postId: input.postId,
+              userId: user?.id || "",
+            },
+          },
+        });
+        if (voteExists) {
+          const vote = await ctx.prisma.vote.delete({
+            where: {
+              postId_userId: {
+                postId: input.postId,
+                userId: user?.id || "",
+              },
+            },
+          });
+          return "deleted";
+        }
+      }
+      if (input.threadId) {
+        const voteExists = await ctx.prisma.vote.findUnique({
+          where: {
+            threadId_userId: {
+              threadId: input.threadId,
+              userId: user?.id || "",
+            },
+          },
+        });
+        if (voteExists) {
+          const vote = await ctx.prisma.vote.delete({
+            where: {
+              threadId_userId: {
+                threadId: input.threadId,
+                userId: user?.id || "",
+              },
+            },
+          });
+          return vote;
+        }
+      }
+    }),
+  getPostVotes: procedure.input(z.number()).query(async ({ input, ctx }) => {
+    const votes = await ctx.prisma.vote.count({
+      where: {
+        postId: input,
+      },
+    });
+    return votes;
+  }),
+  getThreadVotes: procedure.input(z.number()).query(async ({ input, ctx }) => {
+    const votes = await ctx.prisma.vote.count({
+      where: {
+        threadId: input,
+      },
+    });
+    return votes;
   }),
 });
