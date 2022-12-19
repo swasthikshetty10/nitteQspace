@@ -37,9 +37,8 @@ function Query() {
       content: e.target.query.value as string,
       anonymous: e.target.anonymous.checked as boolean,
       images: images as string[],
-      categories: Number(e.target.categories.value) as number,
+      category: Number(e.target.categories.value) as number,
     };
-    console.log(formData);
     mutation.mutateAsync(formData);
   }
 

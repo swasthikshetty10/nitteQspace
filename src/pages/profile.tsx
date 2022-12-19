@@ -12,6 +12,7 @@ import { uploadFile } from "@/utils/fileUpload";
 import FileDropzone, { FileUploadWithProgress } from "@/components/FileUpload";
 import { Avatar } from "flowbite-react";
 import Link from "next/link";
+import Post from "@/components/Post";
 
 function Profile() {
   const { data: session, status } = useSession();
@@ -26,6 +27,9 @@ function Profile() {
   }, [status]);
 
   const user = trpc.user.get.useQuery({ email: session?.user?.email || "" });
+  const query = trpc.post.getQuery.useQuery({
+    email: session?.user?.email || "",
+  });
   if (!user.data) {
     return <>loading</>;
   }
@@ -82,7 +86,9 @@ function Profile() {
         </div>
       </div>
       <div className="glass-wb flex flex-col items-center justify-center gap-5 p-10 ">
-        <h3>You dont have any queries yet!</h3>
+        {query.data && query.data.length === 0 && (
+          <h3>You dont have any queries yet!</h3>
+        )}
 
         <Link
           href="/query"
@@ -90,6 +96,15 @@ function Profile() {
           <AiOutlinePlusCircle className="text-2xl" />
           Post Query
         </Link>
+      </div>
+      <div className="glass-wb flex flex-col items-center justify-center gap-5 p-10 ">
+        {query.data && query.data.length > 0 && <h3>Your Queries</h3>}
+        <div className="mx-auto w-full max-w-4xl space-y-10">
+          {query.data &&
+            query.data.map((post) => {
+              return <Post key={post.id} post={post} />;
+            })}
+        </div>
       </div>
       {modal && <Modal showModal={showModal} data={user.data} />}
     </>

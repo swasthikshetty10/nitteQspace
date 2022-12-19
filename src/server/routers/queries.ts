@@ -30,7 +30,7 @@ export const postRouter = router({
           },
           category: {
             connect: {
-              id: input.category || 1,
+              id: input?.category || 1,
             },
           },
           title: input.title,
@@ -46,20 +46,22 @@ export const postRouter = router({
     .input(
       z
         .object({
-          userId: z.string().optional(),
+          email: z.string().optional(),
           category: z.number().optional(),
         })
         .optional()
     )
     .query(async ({ input, ctx }) => {
-      if (input?.userId) {
+      if (input?.email) {
         const post = await ctx.prisma.post.findMany({
           orderBy: {
             createdAt: "desc",
           },
           where: {
             published: true,
-            authorId: input.userId,
+            author: {
+              email: input.email,
+            },
             categoryId: input.category,
           },
           include: {

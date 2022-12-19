@@ -2,7 +2,7 @@ import { Head } from "next/document";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Carousel, Avatar, Badge } from "flowbite-react";
-import { BiComment, BiUpvote, BiDownvote } from "react-icons/bi";
+import { BiComment, BiUpvote, BiDownvote, BiCommentAdd } from "react-icons/bi";
 import { ImArrowDown, ImArrowUp } from "react-icons/im";
 import { FaShare } from "react-icons/fa";
 import { HiClock, HiCode, HiOutlineSave, HiX } from "react-icons/hi";
@@ -33,6 +33,7 @@ type PostProps = {
 };
 
 function Post({ post }: { post: any }) {
+  const [comments, showComments] = useState(false);
   return (
     <>
       <div className="glass-ws flex w-full  flex-col gap-2 p-3 sm:p-5 ">
@@ -71,10 +72,12 @@ function Post({ post }: { post: any }) {
         <div className="flex w-full items-center justify-between p-2 ">
           <div className="flex  items-center gap-5">
             <PostVotes postId={post.id} />
-            <button className="flex items-center gap-1 opacity-80 hover:opacity-100">
+            <button
+              onClick={() => showComments((c) => !c)}
+              className="flex items-center gap-1 opacity-80 hover:opacity-100">
               <BiComment className="text-xl sm:text-2xl" />
               <a className="text-md hidden font-semibold sm:block">Comments</a>
-              <a className="text-sm font-semibold text-gray-400">3</a>
+              <a className="text-sm font-semibold text-gray-400"></a>
             </button>
           </div>
 
@@ -92,10 +95,12 @@ function Post({ post }: { post: any }) {
         <div className="p-2">
           <p>{post.content}</p>
         </div>
-        <div className="overflow-x-scroll">
-          <CommentBox postId={post.id} />
-          <Comments postId={post.id}></Comments>
-        </div>
+        {comments && (
+          <div className="overflow-x-scroll">
+            <CommentBox postId={post.id} />
+            <Comments postId={post.id}></Comments>
+          </div>
+        )}
       </div>
     </>
   );
@@ -220,6 +225,7 @@ const Comments = ({
   threadId?: number;
 }) => {
   const comments = trpc.post.getComments.useQuery({ postId, threadId });
+  const [show, showComments] = useState(true);
   if (!comments.data) {
     return <div>Loading...</div>;
   }
@@ -249,13 +255,25 @@ const Comments = ({
               </Badge>
             </div>
             <ThreadVotes threadId={comment.id} />
+
             <div className="pb-3 ">
               <div>
                 <p>{comment.content}</p>
               </div>
             </div>
-            <CommentBox threadId={comment.id} />
-            <Comments threadId={comment.id} />
+            <button
+              onClick={() => showComments((c) => !c)}
+              className="hidden  items-center gap-1 opacity-80 hover:opacity-100">
+              <BiComment className="text-xl sm:text-2xl" />
+              <a className="text-md hidden font-semibold sm:block">Comments</a>
+              <a className="text-sm font-semibold text-gray-400"></a>
+            </button>
+            {show && (
+              <>
+                <CommentBox threadId={comment.id} />
+                <Comments threadId={comment.id} />
+              </>
+            )}
           </div>
         );
       })}
@@ -303,7 +321,7 @@ const CommentBox = ({
         <button
           onClick={() => setShow(true)}
           className="my-3 flex items-center gap-1 opacity-80 hover:opacity-100">
-          <BiComment className="text-xl sm:text-2xl" />
+          <BiCommentAdd className="text-xl sm:text-2xl" />
           <a className="text-md hidden font-semibold sm:block">Add Comment</a>
         </button>
       ) : (
