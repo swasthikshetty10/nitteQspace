@@ -21,7 +21,7 @@ export const postRouter = router({
           message: "Not authenticated",
         });
       }
-      const post = await ctx.prisma.post.create({
+      return await ctx.prisma.post.create({
         data: {
           author: {
             connect: {
@@ -40,7 +40,6 @@ export const postRouter = router({
           published: true,
         },
       });
-      return post;
     }),
   getQuery: procedure
     .input(

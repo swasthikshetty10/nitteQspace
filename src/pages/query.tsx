@@ -27,10 +27,6 @@ function Query() {
   });
   function handleSubmit(e: any) {
     e.preventDefault();
-    console.log(e.target.title.value);
-    console.log(e.target.query.value);
-    console.log(e.target.anonymous.checked);
-    console.log(files);
     const images = files.map((file: any) => file.url);
     const formData = {
       title: e.target.title.value as string,

@@ -116,12 +116,12 @@ const PostVotes = ({ postId }: { postId: number }) => {
   const utils = trpc.useContext();
   const upVote = trpc.post.addVote.useMutation({
     onSuccess: () => {
-      votes.refetch();
+      utils.post.getPostVotes.invalidate(postId);
     },
   });
   const unVote = trpc.post.unVote.useMutation({
     onSuccess: () => {
-      votes.refetch();
+      utils.post.getPostVotes.invalidate(postId);
     },
   });
   const handleUpvote = () => {
@@ -208,12 +208,12 @@ const ThreadVotes = ({ threadId }: { threadId: number }) => {
   const utils = trpc.useContext();
   const upVote = trpc.post.addVote.useMutation({
     onSuccess: () => {
-      votes.refetch();
+      utils.post.getThreadVotes.invalidate(threadId);
     },
   });
   const unVote = trpc.post.unVote.useMutation({
     onSuccess: () => {
-      votes.refetch();
+      utils.post.getThreadVotes.invalidate(threadId);
     },
   });
   const handleUpvote = () => {

@@ -53,7 +53,7 @@ function Login() {
           onClick={() => {
             setLoading(true);
             signIn("google", {
-              callbackUrl: `${window.location.origin}/profile`,
+              callbackUrl: `${window.location.origin}/home`,
               redirect: false,
             }).finally(() => setLoading(false));
           }}
