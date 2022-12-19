@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "@/components/Post";
 import { Card } from "flowbite-react";
 import { trpc } from "@/utils/trpc";
 import Spinner from "@/components/Loader/Spinner";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 function Home() {
   const [cat, setBranch] = useState<undefined | number>(undefined);
   const posts = trpc.post.getQuery.useQuery({ category: cat });
   const categories = trpc.post.getCategories.useQuery();
-  if (!posts.data) return <Spinner />;
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+    if (!session?.user) {
+      router.push("/login");
+    }
+  }, [session]);
+
+  if (!posts.data || !session) return <Spinner />;
 
   return (
     <>
