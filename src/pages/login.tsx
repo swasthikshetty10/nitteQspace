@@ -15,7 +15,7 @@ function Login() {
   const { data: session, status } = useSession();
   const router = useRouter();
   if (status === "authenticated") {
-    router.push("/query");
+    router.push("/home");
   }
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ function Login() {
     setSuccess({ show: false, status: false, message: "" });
     signIn("email", {
       email,
-      callbackUrl: `${window.location.origin}/profile`,
+      callbackUrl: `${window.location.origin}/home`,
       redirect: false,
     })
       .then((res) => {
@@ -45,7 +45,7 @@ function Login() {
       });
   };
   return (
-    <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2 bg-gradient-to-br from-sky-300 via-sky-50/50 to-sky-100 p-5 dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-600 ">
+    <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2  ">
       <div className="w-full max-w-md space-y-4 rounded-lg bg-slate-400 bg-opacity-10 p-5  text-center shadow-lg backdrop-blur-xl dark:bg-slate-800">
         <h2 className="font-bold ">Login/Register</h2>
         <button
