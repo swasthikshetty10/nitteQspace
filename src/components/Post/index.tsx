@@ -219,7 +219,7 @@ const ThreadVotes = ({ threadId }: { threadId: number }) => {
   const handleUpvote = () => {
     if (votes.data?.vote && votes.data?.vote?.upvote) {
       unVote.mutate({ threadId: threadId });
-      utils.post.getPostVotes.setData(threadId, (prev) => {
+      utils.post.getThreadVotes.setData(threadId, (prev) => {
         if (prev) {
           return {
             vote: null,
@@ -231,7 +231,7 @@ const ThreadVotes = ({ threadId }: { threadId: number }) => {
     }
     upVote.mutate({ threadId: threadId, upVote: true });
     if (votes.data) {
-      utils.post.getPostVotes.setData(threadId, (prev: any) => {
+      utils.post.getThreadVotes.setData(threadId, (prev: any) => {
         if (prev) {
           return {
             vote: { ...prev?.vote, upvote: TbRoute },
@@ -244,7 +244,7 @@ const ThreadVotes = ({ threadId }: { threadId: number }) => {
   const handleDownvote = () => {
     if (votes.data?.vote && !votes.data?.vote?.upvote) {
       unVote.mutate({ threadId: threadId });
-      utils.post.getPostVotes.setData(threadId, (prev) => {
+      utils.post.getThreadVotes.setData(threadId, (prev) => {
         if (prev) {
           return {
             vote: null,
@@ -257,7 +257,7 @@ const ThreadVotes = ({ threadId }: { threadId: number }) => {
     }
     upVote.mutate({ threadId: threadId, upVote: false });
     if (votes.data) {
-      utils.post.getPostVotes.setData(threadId, (prev: any) => {
+      utils.post.getThreadVotes.setData(threadId, (prev: any) => {
         if (prev) {
           return {
             vote: { ...prev?.vote, upvote: false },
