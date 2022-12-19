@@ -41,12 +41,12 @@ function Post({ post }: { post: any }) {
           <div className="flex items-center justify-between ">
             <div className=" text-md flex items-center text-sm font-bold sm:gap-2">
               <Avatar
-                img={post.author.image}
+                img={post.anonymous ? "/images/avatar.png" : post.author.image}
                 rounded={true}
                 color="gray"
                 className="scale-75 sm:scale-95"
               />
-              <a>{post.author.name}</a>
+              <a>{post.anonymous ? "Anonymous" : post.author.name}</a>
             </div>
             <Badge color={"gray"} className="px-2" icon={HiClock}>
               {getDateAgoString(post.createdAt)}{" "}

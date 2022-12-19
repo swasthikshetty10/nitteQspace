@@ -13,6 +13,7 @@ import FileDropzone, { FileUploadWithProgress } from "@/components/FileUpload";
 import { Avatar } from "flowbite-react";
 import Link from "next/link";
 import Post from "@/components/Post";
+import { Spinner } from "@nextui-org/react";
 
 function Profile() {
   const { data: session, status } = useSession();
@@ -31,7 +32,7 @@ function Profile() {
     email: session?.user?.email || "",
   });
   if (!user.data) {
-    return <>loading</>;
+    return <Spinner />;
   }
   return (
     <>
