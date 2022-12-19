@@ -15,7 +15,7 @@ function Login() {
   const { data: session, status } = useSession();
   const router = useRouter();
   if (status === "authenticated") {
-    router.push("/profile");
+    router.push("/query");
   }
   const handleSubmit = (e: any) => {
     e.preventDefault();

@@ -11,6 +11,7 @@ import { MdOutlineGif } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
 import { trpc } from "@/utils/trpc";
 import { getDateAgoString, getTimeInAMPM } from "@/utils/dateTime";
+import { TbRoute } from "react-icons/tb";
 type PostProps = {
   id: number;
   title: string;
@@ -41,7 +42,11 @@ function Post({ post }: { post: any }) {
           <div className="flex items-center justify-between ">
             <div className=" text-md flex items-center text-sm font-bold sm:gap-2">
               <Avatar
-                img={post.anonymous ? "/images/avatar.png" : post.author.image}
+                img={
+                  post.anonymous
+                    ? "/images/avatar.png"
+                    : post.author?.image || undefined
+                }
                 rounded={true}
                 color="gray"
                 className="scale-75 sm:scale-95"
@@ -56,7 +61,7 @@ function Post({ post }: { post: any }) {
           <div className="inline-flex w-full items-center justify-between gap-5 text-sm  sm:justify-start">
             <h2>{post.title}</h2>
             <a className="h-min rounded-xl bg-slate-800 px-4 py-0.5  font-semibold text-slate-200 dark:bg-slate-100 dark:text-slate-800 md:py-1">
-              CSE
+              {post.category?.name}
             </a>
           </div>
         </div>
@@ -108,6 +113,7 @@ function Post({ post }: { post: any }) {
 
 const PostVotes = ({ postId }: { postId: number }) => {
   const votes = trpc.post.getPostVotes.useQuery(postId);
+  const utils = trpc.useContext();
   const upVote = trpc.post.addVote.useMutation({
     onSuccess: () => {
       votes.refetch();
@@ -121,16 +127,53 @@ const PostVotes = ({ postId }: { postId: number }) => {
   const handleUpvote = () => {
     if (votes.data?.vote && votes.data?.vote?.upvote) {
       unVote.mutate({ postId: postId });
+      utils.post.getPostVotes.setData(postId, (prev) => {
+        if (prev) {
+          return {
+            vote: null,
+            count: prev?.count - 1,
+          };
+        }
+      });
       return;
     }
     upVote.mutate({ postId: postId, upVote: true });
+    if (votes.data) {
+      utils.post.getPostVotes.setData(postId, (prev: any) => {
+        if (prev !== undefined) {
+          return {
+            vote: { ...prev?.vote, upvote: true },
+            count: prev?.count + 1,
+          };
+        }
+        return prev;
+      });
+    }
   };
   const handleDownvote = () => {
     if (votes.data?.vote && !votes.data?.vote?.upvote) {
       unVote.mutate({ postId: postId });
+      utils.post.getPostVotes.setData(postId, (prev) => {
+        if (prev) {
+          return {
+            vote: null,
+            count: prev?.count + 1,
+          };
+        }
+      });
       return;
     }
     upVote.mutate({ postId: postId, upVote: false });
+    if (votes.data) {
+      utils.post.getPostVotes.setData(postId, (prev: any) => {
+        if (prev) {
+          return {
+            vote: { ...prev?.vote, upvote: false },
+            count: prev?.count - 1,
+          };
+        }
+      });
+    }
   };
   return (
     <div className="inline-flex gap-1 ">
@@ -162,6 +205,7 @@ const PostVotes = ({ postId }: { postId: number }) => {
 };
 const ThreadVotes = ({ threadId }: { threadId: number }) => {
   const votes = trpc.post.getThreadVotes.useQuery(threadId);
+  const utils = trpc.useContext();
   const upVote = trpc.post.addVote.useMutation({
     onSuccess: () => {
       votes.refetch();
@@ -175,16 +219,53 @@ const ThreadVotes = ({ threadId }: { threadId: number }) => {
   const handleUpvote = () => {
     if (votes.data?.vote && votes.data?.vote?.upvote) {
       unVote.mutate({ threadId: threadId });
+      utils.post.getPostVotes.setData(threadId, (prev) => {
+        if (prev) {
+          return {
+            vote: null,
+            count: prev?.count - 1,
+          };
+        }
+      });
       return;
     }
     upVote.mutate({ threadId: threadId, upVote: true });
+    if (votes.data) {
+      utils.post.getPostVotes.setData(threadId, (prev: any) => {
+        if (prev) {
+          return {
+            vote: { ...prev?.vote, upvote: TbRoute },
+            count: prev?.count + 1,
+          };
+        }
+      });
+    }
   };
   const handleDownvote = () => {
     if (votes.data?.vote && !votes.data?.vote?.upvote) {
       unVote.mutate({ threadId: threadId });
+      utils.post.getPostVotes.setData(threadId, (prev) => {
+        if (prev) {
+          return {
+            vote: null,
+            count: prev?.count + 1,
+          };
+        }
+      });
+
       return;
     }
     upVote.mutate({ threadId: threadId, upVote: false });
+    if (votes.data) {
+      utils.post.getPostVotes.setData(threadId, (prev: any) => {
+        if (prev) {
+          return {
+            vote: { ...prev?.vote, upvote: false },
+            count: prev?.count - 1,
+          };
+        }
+      });
+    }
   };
   return (
     <div className="inline-flex gap-1 ">

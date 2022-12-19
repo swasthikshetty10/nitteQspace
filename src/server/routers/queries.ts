@@ -66,6 +66,7 @@ export const postRouter = router({
           },
           include: {
             author: true,
+            category: true,
           },
         });
         return post;
@@ -80,6 +81,7 @@ export const postRouter = router({
         },
         include: {
           author: true,
+          category: true,
         },
       });
       return post;
