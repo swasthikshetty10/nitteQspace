@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           className={`${
             dark
               ? "dark bg-gradient-to-br from-slate-900 via-slate-800 to-gray-700 text-gray-200 "
-              : "bg-gradient-to-br from-sky-100 via-emerald-100 to-pink-50   text-gray-800 "
+              : "bg-gradient-to-br from-sky-100 via-emerald-50 to-pink-50   text-gray-800 "
           } relative h-screen w-screen space-y-2 overflow-x-hidden overflow-y-hidden px-2 sm:px-5 md:space-y-5 `}>
           <NavBar />
           <div className=" flex  h-full flex-col-reverse justify-between  gap-5 md:flex-row">
