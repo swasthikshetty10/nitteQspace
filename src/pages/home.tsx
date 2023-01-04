@@ -25,7 +25,7 @@ function Home() {
   return (
     <>
       <div className="glass-wb flex w-full   max-w-7xl items-start gap-5   overflow-x-hidden p-2 sm:p-5">
-        <div className="xs:max-h-[70vh] max-h-[72vh] w-full space-y-14 overflow-y-auto scroll-smooth rounded-xl sm:max-h-[70vh] md:max-h-[75vh]">
+        <div className="xs:max-h-[70vh] h-full w-full space-y-14 overflow-y-auto scroll-smooth rounded-xl sm:max-h-[70vh] md:max-h-[75vh]">
           {posts.data.length > 0 ? (
             posts.data.map((post) => <Post key={post.id} post={post} />)
           ) : (

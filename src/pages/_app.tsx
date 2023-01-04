@@ -25,9 +25,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
             dark
               ? "dark bg-gradient-to-br from-slate-900 via-slate-800 to-gray-700 text-gray-200 "
               : "bg-gradient-to-br from-sky-100 via-emerald-100 to-pink-50   text-gray-800 "
-          } relative h-screen  w-screen overflow-x-hidden overflow-y-hidden px-2 sm:px-5 `}>
+          } relative h-screen w-screen space-y-2 overflow-x-hidden overflow-y-hidden px-2 sm:px-5 md:space-y-5 `}>
           <NavBar />
-          <div className=" mt-5 flex  h-[88vh] flex-col-reverse justify-between  gap-5 sm:mt-10 md:flex-row">
+          <div className=" flex  h-full flex-col-reverse justify-between  gap-5 md:flex-row">
             <SideBar />
             <div className="isolate mx-auto h-full w-full  max-w-7xl space-y-5 overflow-y-auto scroll-smooth ">
               <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
