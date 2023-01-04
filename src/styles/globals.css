@@ -46,10 +46,10 @@
   }
 
   .glass-wb {
-    @apply rounded-2xl border  border-gray-300/50   bg-slate-200/50 backdrop-blur-2xl dark:border-gray-600 dark:bg-gray-800/30;
+    @apply rounded-2xl border  border-slate-300/50   bg-slate-50/40 backdrop-blur-2xl dark:border-gray-600 dark:bg-gray-800/30;
   }
   .glass-ws {
-    @apply rounded-2xl   border-gray-300/50   bg-slate-300/30 shadow-lg shadow-slate-900/20 dark:bg-slate-900/30   dark:shadow-black/40;
+    @apply rounded-2xl   border-gray-300/50   bg-slate-50/40 shadow-md shadow-slate-900/20 backdrop-blur-sm dark:bg-slate-900/30   dark:shadow-black/40;
   }
 
   .btn-glossy {
