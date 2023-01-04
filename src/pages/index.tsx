@@ -1,4 +1,3 @@
-import * as React from "react";
 import Layout from "@/components/layout/Layout";
 import Seo from "@/components/Seo";
 import { trpc } from "@/utils/trpc";
@@ -8,7 +7,6 @@ import Image from "next/image";
 import { Carousel } from "flowbite-react";
 
 export default function HomePage() {
-  const hello = trpc.hello.useQuery({ text: "client" });
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -129,46 +127,53 @@ export default function HomePage() {
             height={500}
           />
         </div>
-        <div className="mx-auto h-56 w-full max-w-5xl  sm:h-64 xl:h-80 2xl:h-96">
-          <Carousel className="">
-            <div className="glass-ws   items-center justify-center space-y-5 p-10 text-center ">
-              <h3>
-                <q>Ask questions and seek help</q>
-              </h3>
-              <p>
-                Need some advice or have a specific question about a subject?
-                Our question and answer forum is here to help. You can ask your
-                peers and mentors for guidance, or even ask anonymously if you
-                prefer. Our community is here to support you and help you
-                succeed in your studies.
-              </p>
+        <div className="  mx-auto h-[34rem] w-full  max-w-5xl sm:h-[30rem] md:h-96 lg:h-80  ">
+          <Carousel className="h-full gap-5 ">
+            <div className="px-2.5">
+              <div className="glass-ws    items-center justify-center space-y-5 p-10 text-center ">
+                <h3>
+                  <q>Ask questions and seek help</q>
+                </h3>
+                <p>
+                  Need some advice or have a specific question about a subject?
+                  Our question and answer forum is here to help. You can ask
+                  your peers and mentors for guidance, or even ask anonymously
+                  if you prefer. Our community is here to support you and help
+                  you succeed in your studies.
+                </p>
+              </div>
             </div>
-            <div className="glass-ws   items-center justify-center space-y-5 p-10 text-center ">
-              <h3>
-                <q>Stay informed about events</q>
-              </h3>
-              <p>
-                There is always something going on at the Student Community. Our
-                event section showcases a variety of exciting events and
-                activities conducted by clubs on campus. From guest lectures and
-                study groups to social events, there is something for everyone.
-                Take a look at our event section to discover what's coming up
-                and find clubs and activities that interest you. We look forward
-                to seeing you at one of the events soon!
-              </p>
+            <div className="px-2.5">
+              <div className="glass-ws     items-center justify-center space-y-5 p-10 text-center ">
+                <h3>
+                  <q>Stay informed about events</q>
+                </h3>
+                <p>
+                  There is always something going on at the Student Community.
+                  Our event section showcases a variety of exciting events and
+                  activities conducted by clubs on campus. From guest lectures
+                  and study groups to social events, there is something for
+                  everyone. Take a look at our event section to discover what's
+                  coming up and find clubs and activities that interest you. We
+                  look forward to seeing you at one of the events soon!
+                </p>
+              </div>
             </div>
-            <div className="glass-ws  items-center justify-center space-y-5 p-10 text-center ">
-              <h3>
-                <q>Share study materials</q>
-              </h3>
-              <p>
-                Have you created your own study guides, found helpful resources
-                online, or just want to share notes from a recent class? Our
-                material sharing platform makes it easy to share knowledge and
-                collaborate with others. Simply upload your materials and share
-                them with the community. We believe that by working together and
-                sharing what we know, we can all learn and grow together
-              </p>
+            <div className="px-2.5">
+              <div className="glass-ws  items-center justify-center space-y-5 p-10 text-center ">
+                <h3>
+                  <q>Share study materials</q>
+                </h3>
+                <p>
+                  Have you created your own study guides, found helpful
+                  resources online, or just want to share notes from a recent
+                  class? Our material sharing platform makes it easy to share
+                  knowledge and collaborate with others. Simply upload your
+                  materials and share them with the community. We believe that
+                  by working together and sharing what we know, we can all learn
+                  and grow together
+                </p>
+              </div>
             </div>
           </Carousel>
         </div>

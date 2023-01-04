@@ -40,22 +40,28 @@ function Login() {
           setSuccess({ show: true, status: true, message: "" });
         }
       })
+      .catch((err) => {})
       .finally(() => {
         setLoading(false);
       });
   };
   return (
-    <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2  ">
-      <div className="w-full max-w-md space-y-4 rounded-lg bg-slate-400 bg-opacity-10 p-5  text-center shadow-lg backdrop-blur-xl dark:bg-slate-800">
+    <div className="absolute top-0 left-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center gap-2 p-5  ">
+      <div className="w-full max-w-md space-y-4 rounded-lg bg-slate-300 bg-opacity-10 p-5 text-center  shadow-lg backdrop-blur-xl dark:bg-slate-800 dark:bg-opacity-40">
         <h2 className="font-bold ">Login/Register</h2>
         <button
           disabled={loading}
           onClick={() => {
             setLoading(true);
+
             signIn("google", {
               callbackUrl: `${window.location.origin}/home`,
               redirect: false,
-            }).finally(() => setLoading(false));
+            })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => setLoading(false));
           }}
           className="delay-50 flex w-full items-center justify-center gap-3 rounded-lg bg-black bg-opacity-5 p-3 text-center text-2xl font-semibold backdrop-blur-3xl transition-all duration-200 hover:bg-opacity-10 dark:bg-opacity-30 dark:hover:bg-opacity-40">
           <FcGoogle /> <span>Google</span>
