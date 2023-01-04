@@ -12,35 +12,28 @@ import { AiOutlineClose } from "react-icons/ai";
 import { trpc } from "@/utils/trpc";
 import { getDateAgoString, getTimeInAMPM } from "@/utils/dateTime";
 import { TbRoute } from "react-icons/tb";
-type PostProps = {
-  id: number;
-  title: string;
-  content: string;
-  images: string[];
-  anonymous: boolean;
-  votes: number;
-  published: boolean;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-    createdAt: Date;
-    updatedAt: Date;
+import {
+  Post as PostBaseType,
+  Category as CatType,
+  User as AuthorType,
+} from "@prisma/client";
+interface PostType extends PostBaseType {
+  author: AuthorType;
+  category: CatType;
+  _count: {
+    Thread: number;
   };
-  categoryId: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
+}
 
-function Post({ post }: { post: any }) {
+function Post({ post }: { post: PostType }) {
   const [comments, showComments] = useState(false);
+  console.log(post);
   return (
     <>
-      <div className="glass-ws flex w-full  flex-col gap-2 p-3 sm:p-5 ">
+      <div className="glass-ws xs:p-3 flex  w-full flex-col gap-2 p-2 sm:p-5 ">
         <div className="space-y-2 p-2">
-          <div className="flex items-center justify-between ">
-            <div className=" text-md flex items-center text-sm font-bold sm:gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-1 ">
+            <div className="text-md flex items-center  justify-start whitespace-nowrap text-sm font-bold sm:gap-2">
               <Avatar
                 img={
                   post.anonymous
@@ -49,31 +42,44 @@ function Post({ post }: { post: any }) {
                 }
                 rounded={true}
                 color="gray"
-                className="scale-75 sm:scale-95"
+                className="-ml-1 scale-75 sm:scale-95"
               />
               <a>{post.anonymous ? "Anonymous" : post.author.name}</a>
             </div>
-            <Badge color={"gray"} className="px-2" icon={HiClock}>
-              {getDateAgoString(post.createdAt)}{" "}
+            <Badge
+              color={"gray"}
+              className="whitespace-nowrap px-1 text-xs sm:px-2 "
+              icon={HiClock}>
+              {getDateAgoString(post.createdAt.toString())}{" "}
               {getTimeInAMPM(new Date(post.createdAt))}
             </Badge>
           </div>
-          <div className="inline-flex w-full items-center justify-between gap-5 text-sm  sm:justify-start">
-            <h2>{post.title}</h2>
-            <a className="h-min rounded-xl bg-slate-800 px-4 py-0.5  font-semibold text-slate-200 dark:bg-slate-100 dark:text-slate-800 md:py-1">
+          <div className="inline-flex w-full items-center justify-between gap-5 text-sm">
+            <h3>{post.title}</h3>
+            <a className="h-min rounded-md  bg-slate-800 px-3 py-0.5 text-xs  font-semibold text-slate-200 dark:bg-slate-100 dark:text-slate-800 ">
               {post.category?.name}
             </a>
           </div>
         </div>
-        {post.images.length > 0 && (
+        {Array.isArray(post.images) && post.images.length > 0 && (
           <div className="h-56 w-auto  sm:h-64 xl:h-80 2xl:h-96">
-            <Carousel slideInterval={5000}>
-              {post.images.map((img: any, i: any) => (
-                <img src={img} alt="image" key={i} />
+            <Carousel className="" slideInterval={5000}>
+              {post.images?.map((img: any, i: any) => (
+                <Image
+                  height={1000}
+                  width={1000}
+                  className="h-full w-full object-contain"
+                  src={img}
+                  alt="image"
+                  key={i}
+                />
               ))}
             </Carousel>
           </div>
         )}
+        <div className="p-2">
+          <p>{post.content}</p>
+        </div>
         <div className="flex w-full items-center justify-between p-2 ">
           <div className="flex  items-center gap-5">
             <PostVotes postId={post.id} />
@@ -82,7 +88,9 @@ function Post({ post }: { post: any }) {
               className="flex items-center gap-1 opacity-80 hover:opacity-100">
               <BiComment className="text-xl sm:text-2xl" />
               <a className="text-md hidden font-semibold sm:block">Comments</a>
-              <a className="text-sm font-semibold text-gray-400"></a>
+              <a className="text-sm font-semibold text-gray-400">
+                {post._count.Thread}
+              </a>
             </button>
           </div>
 
@@ -96,9 +104,6 @@ function Post({ post }: { post: any }) {
               <a className="text-md hidden font-semibold sm:block">Save</a>
             </button>
           </div>
-        </div>
-        <div className="p-2">
-          <p>{post.content}</p>
         </div>
         {comments && (
           <div className="overflow-x-scroll">

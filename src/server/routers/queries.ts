@@ -52,6 +52,7 @@ export const postRouter = router({
     )
     .query(async ({ input, ctx }) => {
       if (input?.email) {
+        // add comments count
         const post = await ctx.prisma.post.findMany({
           orderBy: {
             createdAt: "desc",
@@ -66,8 +67,14 @@ export const postRouter = router({
           include: {
             author: true,
             category: true,
+            _count: {
+              select: {
+                Thread: true,
+              },
+            },
           },
         });
+
         return post;
       }
       const post = await ctx.prisma.post.findMany({
@@ -81,6 +88,11 @@ export const postRouter = router({
         include: {
           author: true,
           category: true,
+          _count: {
+            select: {
+              Thread: true,
+            },
+          },
         },
       });
       return post;

@@ -9,7 +9,12 @@ export function getDateAgoString(dateTime: string): string {
   } else if (daysAgo > 1 && daysAgo <= 7) {
     return `${daysAgo} days ago`;
   } else {
-    return new Date(dateTime).toLocaleDateString();
+    // in 1 jan 2022 format
+    return new Date(dateTime).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   }
 }
 
@@ -17,6 +22,7 @@ export function getTimeInAMPM(dateTime: Date): string {
   const hours = dateTime.getHours();
   const minutes = dateTime.getMinutes();
   const ampm = hours >= 12 ? "PM" : "AM";
-
-  return `${hours % 12}:${minutes < 10 ? "0" : ""}${minutes} ${ampm}`;
+  const hours12 = hours % 12 || 12;
+  const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+  return `${hours12}:${minutesStr} ${ampm}`;
 }

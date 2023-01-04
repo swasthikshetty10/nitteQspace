@@ -23,7 +23,7 @@ function SideBar() {
   );
 
   return (
-    <div className="fixed  bottom-2 left-0   z-50 flex h-fit  w-full  items-center justify-center px-2  md:sticky md:mb-0  md:h-full md:w-fit  md:px-0 2xl:fixed 2xl:top-0 2xl:left-5 2xl:bottom-0 ">
+    <div className="fixed  bottom-2 left-0   z-50 flex h-fit  w-full  items-center justify-center px-2 sm:px-5  md:sticky md:mb-0  md:h-full md:w-fit  md:px-0 2xl:fixed 2xl:top-0 2xl:left-5 2xl:bottom-0 ">
       <div className="w-full">
         <div className=" glass-wb  flex flex-1 items-center justify-evenly gap-5 p-5 text-4xl   sm:justify-center md:flex-col md:gap-10">
           <Link href="/home" passHref legacyBehavior>
