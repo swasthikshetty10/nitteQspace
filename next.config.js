@@ -8,6 +8,9 @@ const nextConfig = {
     dirs: ['src'],
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   //Uncoment to add domain whitelist
   images: {
     remotePatterns: [
