@@ -1,6 +1,5 @@
 import { AppProps } from "next/app";
 import "@/styles/globals.css";
-import "react-tenor/dist/styles.css";
 import { useEffect, useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import DarkLightContextProvider from "@/context/darkContext";

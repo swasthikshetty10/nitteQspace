@@ -7,9 +7,7 @@ import { BsReply } from "react-icons/bs";
 import { ImArrowDown, ImArrowUp } from "react-icons/im";
 import { FaShare } from "react-icons/fa";
 import { HiClock, HiCode, HiOutlineSave, HiX } from "react-icons/hi";
-import Tenor from "react-tenor";
 import { MdOutlineGif } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
 import { trpc } from "@/utils/trpc";
 import { getDateAgoString, getTimeInAMPM } from "@/utils/dateTime";
 import { TbRoute } from "react-icons/tb";
@@ -28,7 +26,6 @@ interface PostType extends PostBaseType {
 
 function Post({ post }: { post: PostType }) {
   const [comments, showComments] = useState(false);
-  console.log(post);
   return (
     <>
       <div className="glass-ws xs:p-3 flex  w-full flex-col gap-2 p-2 sm:p-5 ">
@@ -107,7 +104,7 @@ function Post({ post }: { post: PostType }) {
           </div>
         </div>
         {comments && (
-          <div className="overflow-x-scroll">
+          <div className="overflow-x-clip">
             <CommentBox postId={post.id} />
             <Comments postId={post.id}></Comments>
           </div>
@@ -321,58 +318,63 @@ const Comments = ({
     <div>
       {comments.data.map((comment) => {
         return (
-          <div
-            key={comment.id}
-            className="flex-flex-col min-w-fit gap-2  border-l-2 border-gray-900/20 p-5 pb-0 dark:border-gray-100/20">
-            <div className="-ml-4 inline-flex w-full min-w-fit items-center  gap-3">
-              <div className="inline-flex items-center gap-2">
-                <Avatar
-                  img={comment.author.image || undefined}
-                  rounded={true}
-                  color="gray"
-                  className="min-w-fit scale-75 sm:scale-95"
-                />
-                {comment.author.name}
+          <div key={comment.id} className="flex-flex-col   gap-2 p-5 pr-0 pb-0">
+            <div className="-ml-3 inline-flex items-center gap-2">
+              <Image
+                height={30}
+                width={30}
+                src={comment.author.image || "/images/user.png"}
+                alt={comment.author.name || "user"}
+                className="h-6 w-auto   rounded-full sm:h-7 "
+              />
+              <div className=" inline-flex w-full  flex-wrap items-center  text-sm  font-semibold">
+                <a className="pr-2">{comment.author.name}</a>
+                <a className="whitespace-nowrap  text-xs font-semibold opacity-75 ">
+                  {getDateAgoString(comment.createdAt)}{" "}
+                  {getTimeInAMPM(new Date(comment.createdAt))}
+                </a>
               </div>
-              <Badge
-                className="whitespace-nowrap px-2"
-                color={"gray"}
-                icon={HiClock}>
-                {getDateAgoString(comment.createdAt)}{" "}
-                {getTimeInAMPM(new Date(comment.createdAt))}
-              </Badge>
             </div>
-            <div className=" border-l-2 border-gray-900/20 pl-5 pb-0 dark:border-gray-100/20">
-              <div>
-                <p>{comment.content}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <ThreadVotes threadId={comment.id} />
+            <div className="border-l-[1.5px]  border-gray-900/20 pl-4  dark:border-gray-100/20">
+              <div className="">
+                <div>
+                  <p>{comment.content}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ThreadVotes threadId={comment.id} />
+                  <button
+                    onClick={() => setShowBox((s) => !s)}
+                    className="my-3 flex items-center gap-1  opacity-80 transition-opacity hover:opacity-100">
+                    <BsReply className="text-xl sm:text-2xl" />
+                    <a className="hidden text-sm font-semibold sm:block">
+                      Reply
+                    </a>
+                  </button>
+                </div>
                 <button
-                  onClick={() => setShowBox((s) => !s)}
-                  className="my-3 flex items-center gap-1  opacity-80 transition-opacity hover:opacity-100">
-                  <BsReply className="text-xl sm:text-2xl" />
-                  <a className="hidden text-sm font-semibold sm:block">Reply</a>
+                  onClick={() => showComments((c) => !c)}
+                  className="hidden  items-center gap-1 opacity-80 hover:opacity-100">
+                  <BiComment className="text-xl sm:text-2xl" />
+                  <a className="text-md hidden font-semibold sm:block">
+                    Comments
+                  </a>
+                  <a className="text-sm font-semibold text-gray-400"></a>
                 </button>
               </div>
-              <button
-                onClick={() => showComments((c) => !c)}
-                className="hidden  items-center gap-1 opacity-80 hover:opacity-100">
-                <BiComment className="text-xl sm:text-2xl" />
-                <a className="text-md hidden font-semibold sm:block">
-                  Comments
-                </a>
-                <a className="text-sm font-semibold text-gray-400"></a>
-              </button>
-            </div>
-            {show && (
-              <>
-                {showBox && (
-                  <CommentBox setShowBox={setShowBox} threadId={comment.id} />
+              <div className="-ml-4">
+                {show && (
+                  <>
+                    {showBox && (
+                      <CommentBox
+                        setShowBox={setShowBox}
+                        threadId={comment.id}
+                      />
+                    )}
+                    <Comments threadId={comment.id} />
+                  </>
                 )}
-                <Comments threadId={comment.id} />
-              </>
-            )}
+              </div>
+            </div>
           </div>
         );
       })}
@@ -470,10 +472,10 @@ const CommentBox = ({
           </div>
           {showGif && (
             <div className="flex w-full justify-end gap-2 p-2">
-              <Tenor
+              {/* <Tenor
                 token="PFOXR5L7C95P"
                 onSelect={(result) => console.log(result)}
-              />
+              /> */}
 
               <button
                 onClick={() => setShowGif(false)}
