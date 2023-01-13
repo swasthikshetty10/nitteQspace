@@ -16,7 +16,7 @@ import {
   Category as CatType,
   User as AuthorType,
 } from "@prisma/client";
-interface PostType extends PostBaseType {
+export interface PostType extends PostBaseType {
   author: AuthorType;
   category: CatType;
   _count: {
@@ -24,7 +24,7 @@ interface PostType extends PostBaseType {
   };
 }
 
-function Post({ post }: { post: PostType }) {
+function Post({ post }: { post: any }) {
   const [comments, showComments] = useState(false);
   return (
     <>

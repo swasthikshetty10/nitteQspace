@@ -1,7 +1,5 @@
 import Layout from "@/components/layout/Layout";
 import Seo from "@/components/Seo";
-import { trpc } from "@/utils/trpc";
-import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { Carousel } from "flowbite-react";
@@ -181,4 +179,12 @@ export default function HomePage() {
       </main>
     </Layout>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Home",
+    },
+  };
 }
