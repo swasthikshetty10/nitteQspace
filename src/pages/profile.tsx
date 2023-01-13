@@ -10,11 +10,9 @@ import { RiDragDropLine } from "react-icons/ri";
 import { trpc } from "@/utils/trpc";
 import { uploadFile } from "@/utils/fileUpload";
 import FileDropzone, { FileUploadWithProgress } from "@/components/FileUpload";
-import { Avatar } from "flowbite-react";
+import { Avatar, Spinner } from "flowbite-react";
 import Link from "next/link";
 import Post from "@/components/Post";
-import { Spinner } from "@nextui-org/react";
-
 function Profile() {
   const { data: session, status } = useSession();
   const [modal, showModal] = useState(false);

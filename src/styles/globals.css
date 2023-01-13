@@ -41,10 +41,6 @@
       U+2215, U+FEFF, U+FFFD;
   }
 
-  .cursor-newtab {
-    cursor: url("/images/new-tab.png") 10 10, pointer;
-  }
-
   .glass-wb {
     @apply rounded-2xl border  border-slate-300/50   bg-slate-50/40 backdrop-blur-2xl dark:border-gray-600 dark:bg-gray-800/30;
   }
