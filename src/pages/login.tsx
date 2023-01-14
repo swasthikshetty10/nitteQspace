@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { AiOutlineMail, AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { signIn,useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { AiOutlineLoading3Quarters,AiOutlineMail } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -40,7 +40,6 @@ function Login() {
           setSuccess({ show: true, status: true, message: "" });
         }
       })
-      .catch((err) => {})
       .finally(() => {
         setLoading(false);
       });
