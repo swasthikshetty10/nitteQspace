@@ -47,16 +47,16 @@ export const postRouter = router({
         .object({
           email: z.string().optional(),
           category: z.number().optional(),
+          limit: z.number().min(1).max(100).nullish(),
+          cursor: z.number().nullish()
         })
-        .optional()
     )
     .query(async ({ input, ctx }) => {
+      const limit = input.limit ?? 10;
+      const { cursor } = input;
       if (input?.email) {
-        // add comments count
         const post = await ctx.prisma.post.findMany({
-          orderBy: {
-            createdAt: "desc",
-          },
+  
           where: {
             published: true,
             author: {
@@ -73,14 +73,26 @@ export const postRouter = router({
               },
             },
           },
-        });
+  
+          take: limit,
+          skip: cursor ? 1 : 0,
+          cursor: cursor ? { id: cursor } : undefined,
+          orderBy: {
+            createdAt: "desc",
+          },
 
-        return post;
+        });
+        let nextCursor: typeof cursor | undefined = undefined;
+      if (post.length > limit) {
+        const nextItem = post.pop()
+        nextCursor = nextItem?.id;
+      }
+
+        return {post,
+          nextCursor,
+        };
       }
       const post = await ctx.prisma.post.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
         where: {
           published: true,
           categoryId: input?.category,
@@ -94,8 +106,23 @@ export const postRouter = router({
             },
           },
         },
+        take: limit + 1,
+          cursor: cursor ? { id: cursor } : undefined,
+          orderBy: {
+            createdAt: "desc",
+          },
+          
       });
-      return post;
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (post.length > limit) {
+        const nextItem = post.pop()
+        nextCursor = nextItem?.id;
+      }
+
+        return {post,
+          nextCursor,
+        };
+    
     }),
   addComment: procedure
     .input(

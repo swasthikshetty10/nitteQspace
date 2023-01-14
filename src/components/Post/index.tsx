@@ -1,4 +1,4 @@
-import { Head } from "next/document";
+
 import Image from "next/image";
 import React, { useState } from "react";
 import { Carousel, Avatar, Badge } from "flowbite-react";
@@ -16,15 +16,15 @@ import {
   Category as CatType,
   User as AuthorType,
 } from "@prisma/client";
-export interface PostType extends PostBaseType {
+
+type PostProps =  PostBaseType & {
   author: AuthorType;
   category: CatType;
   _count: {
-    Thread: number;
+      Thread: number;
   };
 }
-
-function Post({ post }: { post: any }) {
+function Post({ post }: { post:  any }) {
   const [comments, showComments] = useState(false);
   return (
     <>
