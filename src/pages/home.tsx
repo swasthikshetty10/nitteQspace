@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Post from "@/components/Post";
-import { Card } from "flowbite-react";
-import { trpc } from "@/utils/trpc";
-import Spinner from "@/components/Loader/Spinner";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+
+import Spinner from "@/components/Loader/Spinner";
+import Post from "@/components/Post";
+
+import { trpc } from "@/utils/trpc";
 function Home() {
   const [cat, setBranch] = useState<undefined | number>(undefined);
   const posts = trpc.post.getQuery.useQuery({ category: cat });
@@ -18,14 +19,14 @@ function Home() {
     if (!session?.user) {
       router.push("/login");
     }
-  }, [session]);
+  }, [router, session, status]);
 
   if (!posts.data || !session) return <Spinner />;
 
   return (
     <>
       <div className="glass-wb flex w-full   max-w-7xl items-start gap-5   overflow-x-hidden p-2 sm:p-5">
-        <div className="xs:max-h-[70vh] h-full w-full space-y-14 overflow-y-auto scroll-smooth rounded-xl sm:max-h-[70vh] md:max-h-[75vh]">
+        <div className="xs:max-h-[70vh] h-full w-full space-y-14 overflow-y-auto scroll-smooth md:pr-1.5 rounded-xl sm:max-h-[70vh] md:max-h-[75vh] lg:max-h-[80vh]">
           {posts.data.length > 0 ? (
             posts.data.map((post) => <Post key={post.id} post={post} />)
           ) : (
@@ -84,7 +85,7 @@ function Home() {
                 })}
             </div>
           </div>
-          <RecentPosts />
+         
         </div>
       </div>
     </>
@@ -110,99 +111,3 @@ const Badge = ({ selected, onClick, children, className }: any) => {
   );
 };
 
-const RecentPosts = () => {
-  return (
-    <div className="glass-wb w-full   bg-gray-300/50 p-5  ">
-      <div className="flex items-center justify-between">
-        <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
-          Recent Queries
-        </h5>
-        <a
-          href="#"
-          className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-          View all
-        </a>
-      </div>
-      <div className="flow-root ">
-        <ul className="max-h-56 w-full  divide-y divide-gray-200 overflow-y-auto  dark:divide-gray-700">
-          <li className="py-3 sm:py-4">
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0">
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src="https://avatars.githubusercontent.com/u/62538932?v=4"
-                  alt="Neil image"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                  Swasthik Shetty
-                </p>
-                <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                  2hrs ago
-                </p>
-              </div>
-            </div>
-          </li>
-          <li className="py-3 sm:py-4">
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0">
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src="https://avatars.githubusercontent.com/u/62538932?v=4"
-                  alt="Neil image"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                  Vidyesh Kumar
-                </p>
-                <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                  5hrs ago
-                </p>
-              </div>
-            </div>
-          </li>
-          <li className="py-3 sm:py-4">
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0">
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src="https://avatars.githubusercontent.com/u/62538932?v=4"
-                  alt="Neil image"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                  Swasthik Ashok Shetty
-                </p>
-                <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                  yesterday
-                </p>
-              </div>
-            </div>
-          </li>
-          <li className="py-3 sm:py-4">
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0">
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src="https://avatars.githubusercontent.com/u/62538932?v=4"
-                  alt="Neil image"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                  Swasthik Ashok Shetty
-                </p>
-                <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                  yesterday
-                </p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
-};
