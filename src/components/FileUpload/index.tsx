@@ -1,8 +1,9 @@
-import { uploadFile } from "@/utils/fileUpload";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { MdClear } from "react-icons/md";
 import { RiDragDropLine } from "react-icons/ri";
+
+import { uploadFile } from "@/utils/fileUpload";
 export default function FileDropzone({ files, setFiles }: any) {
   const onDrop = useCallback((acceptedFiles: any, rejectedFiles: any) => {
     const mappedAcc = acceptedFiles.map((file: any) => ({
@@ -14,7 +15,7 @@ export default function FileDropzone({ files, setFiles }: any) {
   const onDelete = (file: any) => {
     setFiles((curr: any) => curr.filter((fw: any) => fw.file != file));
   };
-  const onUpload = (file: any, url: String) => {
+  const onUpload = (file: any, url: string) => {
     setFiles((curr: any) =>
       curr.map((fw: any) => {
         if (fw.file === file) {

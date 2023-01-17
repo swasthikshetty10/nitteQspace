@@ -1,8 +1,11 @@
-import { router, procedure } from "../trpc";
-import { optional, z } from "zod";
 import { initTRPC, TRPCError } from "@trpc/server";
-import { Context } from "@/server/context";
 import { threadId } from "worker_threads";
+import { optional, z } from "zod";
+
+import { Context } from "@/server/context";
+
+import { procedure, router } from "../trpc";
+
 export const postRouter = router({
   addQuery: procedure
     .input(
@@ -43,20 +46,18 @@ export const postRouter = router({
     }),
   getQuery: procedure
     .input(
-      z
-        .object({
-          email: z.string().optional(),
-          category: z.number().optional(),
-          limit: z.number().min(1).max(100).nullish(),
-          cursor: z.number().nullish()
-        })
+      z.object({
+        email: z.string().optional(),
+        category: z.number().optional(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      })
     )
     .query(async ({ input, ctx }) => {
       const limit = input.limit ?? 10;
       const { cursor } = input;
       if (input?.email) {
         const post = await ctx.prisma.post.findMany({
-  
           where: {
             published: true,
             author: {
@@ -73,24 +74,21 @@ export const postRouter = router({
               },
             },
           },
-  
+
           take: limit,
           skip: cursor ? 1 : 0,
           cursor: cursor ? { id: cursor } : undefined,
           orderBy: {
             createdAt: "desc",
           },
-
         });
         let nextCursor: typeof cursor | undefined = undefined;
-      if (post.length > limit) {
-        const nextItem = post.pop()
-        nextCursor = nextItem?.id;
-      }
+        if (post.length > limit) {
+          const nextItem = post.pop();
+          nextCursor = nextItem?.id;
+        }
 
-        return {post,
-          nextCursor,
-        };
+        return { post, nextCursor };
       }
       const post = await ctx.prisma.post.findMany({
         where: {
@@ -107,22 +105,18 @@ export const postRouter = router({
           },
         },
         take: limit + 1,
-          cursor: cursor ? { id: cursor } : undefined,
-          orderBy: {
-            createdAt: "desc",
-          },
-          
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          createdAt: "desc",
+        },
       });
       let nextCursor: typeof cursor | undefined = undefined;
       if (post.length > limit) {
-        const nextItem = post.pop()
+        const nextItem = post.pop();
         nextCursor = nextItem?.id;
       }
 
-        return {post,
-          nextCursor,
-        };
-    
+      return { post, nextCursor };
     }),
   addComment: procedure
     .input(

@@ -1,30 +1,31 @@
-
-import Image from "next/image";
-import React, { useState } from "react";
-import { Carousel, Avatar, Badge } from "flowbite-react";
-import { BiComment, BiUpvote, BiDownvote } from "react-icons/bi";
-import { BsReply } from "react-icons/bs";
-import { ImArrowDown, ImArrowUp } from "react-icons/im";
-import { FaShare } from "react-icons/fa";
-import { HiClock, HiCode, HiOutlineSave, HiX } from "react-icons/hi";
-import { MdOutlineGif } from "react-icons/md";
-import { trpc } from "@/utils/trpc";
-import { getDateAgoString, getTimeInAMPM } from "@/utils/dateTime";
-import { TbRoute } from "react-icons/tb";
 import {
-  Post as PostBaseType,
   Category as CatType,
+  Post as PostBaseType,
   User as AuthorType,
 } from "@prisma/client";
+import { Avatar, Badge, Carousel } from "flowbite-react";
+import Image from "next/image";
+import React, { useState } from "react";
+import { BiComment, BiDownvote, BiUpvote } from "react-icons/bi";
+import { BsReply } from "react-icons/bs";
+import { FaShare } from "react-icons/fa";
+import { HiClock, HiCode, HiOutlineSave, HiX } from "react-icons/hi";
+import { ImArrowDown, ImArrowUp } from "react-icons/im";
+import { MdOutlineGif } from "react-icons/md";
+import { TbRoute } from "react-icons/tb";
 
-type PostProps =  PostBaseType & {
+import { getDateAgoString, getTimeInAMPM } from "@/utils/dateTime";
+import { trpc } from "@/utils/trpc";
+
+type PostProps = PostBaseType & {
   author: AuthorType;
   category: CatType;
   _count: {
-      Thread: number;
+    Thread: number;
   };
-}
-function Post({ post }: { post:  any }) {
+};
+
+function Post({ post }: { post: any }) {
   const [comments, showComments] = useState(false);
   return (
     <>
@@ -393,14 +394,12 @@ const CommentBox = ({
 }) => {
   const [showGif, setShowGif] = useState(false);
   const [comment, setComment] = useState("");
-  const [gif, setGif] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const utils = trpc.useContext();
   const mutation = trpc.post.addComment.useMutation({
     onSuccess: () => {
       setShowBox && setShowBox(false);
       setComment("");
-      setGif("");
       setImages([]);
       utils.post.getComments.invalidate();
     },
@@ -472,11 +471,6 @@ const CommentBox = ({
           </div>
           {showGif && (
             <div className="flex w-full justify-end gap-2 p-2">
-              {/* <Tenor
-                token="PFOXR5L7C95P"
-                onSelect={(result) => console.log(result)}
-              /> */}
-
               <button
                 onClick={() => setShowGif(false)}
                 type="button"

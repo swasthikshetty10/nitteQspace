@@ -6,12 +6,13 @@ import Spinner from "@/components/Loader/Spinner";
 import Post from "@/components/Post";
 
 import { trpc } from "@/utils/trpc";
+
 function Home() {
   const [cat, setBranch] = useState<undefined | number>(undefined);
-  const posts = trpc.post.getQuery.useInfiniteQuery({ category: cat  , limit: 4,}, { getNextPageParam: (lastPage) => lastPage.nextCursor,});
-  useEffect(() => {
-   console.log(posts.data)
-  }, [posts.data])
+  const posts = trpc.post.getQuery.useInfiniteQuery(
+    { category: cat, limit: 4 },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  );
   const categories = trpc.post.getCategories.useQuery();
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -32,42 +33,44 @@ function Home() {
   }, [cat]);
   useEffect(() => {
     if (!postContainer.current) return;
-    
+
     const handleScroll = () => {
-      if(!postContainer.current) return;
+      if (!postContainer.current) return;
       if (
-        postContainer.current.scrollTop + postContainer.current.clientHeight + 10 >=
-        postContainer.current.scrollHeight 
+        postContainer.current.scrollTop +
+          postContainer.current.clientHeight +
+          10 >=
+        postContainer.current.scrollHeight
       ) {
         posts.fetchNextPage();
       }
     };
-    postContainer.current.addEventListener("scroll", handleScroll);
+    const container = postContainer.current;
+    container.addEventListener("scroll", handleScroll);
     return () => {
-      postContainer.current?.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("scroll", handleScroll);
     };
   }, [postContainer, posts]);
-  
-
 
   if (!posts.data || !session) return <Spinner />;
 
   return (
     <>
       <div className="glass-wb flex w-full   max-w-7xl items-start gap-5   overflow-x-hidden p-2 sm:p-5">
-      
-        <div ref={postContainer} className="xs:max-h-[70vh] h-full w-full space-y-14 overflow-y-auto scroll-smooth md:pr-1.5 rounded-xl sm:max-h-[70vh] md:max-h-[75vh] lg:max-h-[80vh]">
-          {
-           posts.data?.pages.map((page) => {
-              return page.post.map((post) => <Post key={post.id} post={post} />) ?? <div className="glass-ws space-y-5 p-5 text-center text-3xl">
+        <div
+          ref={postContainer}
+          className="xs:max-h-[70vh] h-full w-full space-y-14 overflow-y-auto  rounded-xl sm:max-h-[70vh] md:max-h-[75vh] md:pr-1.5 lg:max-h-[80vh]">
+          {posts.data?.pages.map((page) => {
+            return (
+              page.post.map((post) => <Post key={post.id} post={post} />) ?? (
+                <div className="glass-ws space-y-5 p-5 text-center text-3xl">
                   <p>No Queries found</p>
                   <p className="text-sm">Try changing the filters</p>
                 </div>
-              
-           })}
-          {
-            posts.isFetchingNextPage &&  <Spinner />
-          }
+              )
+            );
+          })}
+          {posts.isFetchingNextPage && <Spinner />}
         </div>
         <div className=" glass-ws  xs:h-[70vh] hidden h-[72vh]  w-full min-w-[20vw] max-w-[20vw] flex-col items-center justify-center space-y-5  overflow-y-hidden p-5 sm:h-[70vh]  md:h-[75vh] lg:block">
           <div className="space-y-2  pb-5 font-semibold">
@@ -118,7 +121,6 @@ function Home() {
                 })}
             </div>
           </div>
-         
         </div>
       </div>
     </>
@@ -143,4 +145,3 @@ const Badge = ({ selected, onClick, children, className }: any) => {
     </div>
   );
 };
-
