@@ -16,6 +16,7 @@ function Home() {
   const categories = trpc.post.getCategories.useQuery();
   const { data: session, status } = useSession();
   const router = useRouter();
+
   const postContainer = React.useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (status === "loading") {
