@@ -30,15 +30,6 @@ export const authOptions = {
       sendVerificationRequest,
     }),
   ],
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }: any) {
-      if (user.email.endsWith("@nmamit.in")) {
-        return true;
-      }
-      return false;
-    },
-  },
-
   secret: process.env.AUTH_SECRET,
   allowDangerousEmailAccountLinking: true,
 };
